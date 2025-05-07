@@ -46,7 +46,7 @@ class ContactsController < ApplicationController
         redirect_back_or_to root_path
       end
     end
-    MessageHandler.init(params)
+    puts MessageHandler.init(params)
     redirect_back_or_to root_path
   end
 
@@ -70,6 +70,8 @@ class ContactsController < ApplicationController
       else
         puts "missing data"
       end
+      flash[:notice] = "Contacts were successfully added!"
+      redirect_to contacts_path and return
     end
   end
 
