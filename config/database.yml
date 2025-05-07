@@ -28,10 +28,28 @@ production:
     host: <%= ENV['POSTGRES_HOST'] %>
 
   cache:
-    <<: *primary
+    <<: *default
+    adapter: postgresql
+    encoding: unicode
+    database: <%= ENV['POSTGRES_DB'] %>_cache
+    username: <%= ENV['POSTGRES_USER'] %>
+    password: <%= ENV['POSTGRES_PASSWORD'] %>
+    host: <%= ENV['POSTGRES_HOST'] %>
 
   cable:
-    <<: *primary
+    <<: *default
+    adapter: postgresql
+    encoding: unicode
+    database: <%= ENV['POSTGRES_DB'] %>_cable
+    username: <%= ENV['POSTGRES_USER'] %>
+    password: <%= ENV['POSTGRES_PASSWORD'] %>
+    host: <%= ENV['POSTGRES_HOST'] %>
 
   queue:
-    <<: *primary
+    <<: *default
+    adapter: postgresql
+    encoding: unicode
+    database: <%= ENV['POSTGRES_DB'] %>_queue
+    username: <%= ENV['POSTGRES_USER'] %>
+    password: <%= ENV['POSTGRES_PASSWORD'] %>
+    host: <%= ENV['POSTGRES_HOST'] %>
