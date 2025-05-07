@@ -8,7 +8,7 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 50.times do
-  Student.create!(
+  Contact.create!(
     name: "#{Faker::Name.male_first_name} #{Faker::Name.last_name}",
     phone: Faker::PhoneNumber.cell_phone,
     year_entered: Faker::Date.between(from: '2014-09-23', to: '2014-09-23'),
@@ -17,7 +17,7 @@
 end
 
 50.times do
-  Student.create!(
+  Contact.create!(
     name: "#{Faker::Name.male_first_name} #{Faker::Name.last_name}",
     phone: Faker::PhoneNumber.cell_phone,
     year_entered: Faker::Date.between(from: '2015-09-23', to: '2015-09-23'),
@@ -26,7 +26,7 @@ end
 end
 
 50.times do
-  Student.create!(
+  Contact.create!(
     name: "#{Faker::Name.male_first_name} #{Faker::Name.last_name}",
     phone: Faker::PhoneNumber.cell_phone,
     year_entered: Faker::Date.between(from: '2016-09-23', to: '2016-09-23'),
