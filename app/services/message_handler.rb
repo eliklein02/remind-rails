@@ -54,10 +54,9 @@ class MessageHandler
 
   def self.handle_year_enrolled(params)
     start_date = Date.strptime(params[:start], "%m/%d/%Y").to_s.to_time.to_i
-    end_date = Date.strptime(params[:start], "%m/%d/%Y").to_s.to_time.to_i
+    end_date = Date.strptime(params[:end], "%m/%d/%Y").to_s.to_time.to_i
 
     send_list = Contact.all.select do |c|
-      puts c.year_entered.to_s.to_time.to_i
       (c.year_entered && c.year_left) && (start_date <= c.year_left.to_s.to_time.to_i && end_date >= c.year_entered.to_s.to_time.to_i)
     end
     status = send_list.each.map do |c|

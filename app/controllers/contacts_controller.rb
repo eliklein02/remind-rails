@@ -13,10 +13,10 @@ class ContactsController < ApplicationController
   end
 
   def create
-    puts contact_params["year_entered"]
+    puts params
+    b_day = params["bday"]
     @contact = Contact.new(contact_params)
-    puts @contact.inspect
-
+    @contact.birthday = Date.strptime(b_day, "%m/%d/%Y") if b_day.present?
     if @contact.save
       flash[:notice] = "Contact was successfully created."
       redirect_to @contact
@@ -84,8 +84,9 @@ class ContactsController < ApplicationController
 
   def contact_params
     params.require(:contact).permit(:name, :email, :phone, :year_entered, :year_left, :birthday).tap do |c_p|
-      c_p[:year_entered] = Date.strptime(c_p[:year_entered], "%m/%d/%Y") if c_p[:year_entered].present?
-      c_p[:year_left] = Date.strptime(c_p[:year_left], "%m/%d/%Y") if c_p[:year_left].present?
+      c_p[:year_entered] = Date.strptime(c_p[:year_entered], "%m/%d/%Y") if c_p[:year_entered].present? && c_p[:year_entered].match?(/\d{1,2}\/\d{1,2}\/\d{4}/)
+      c_p[:year_left] = Date.strptime(c_p[:year_left], "%m/%d/%Y") if c_p[:year_left].present? && c_p[:year_left].match?(/\d{1,2}\/\d{1,2}\/\d{4}/)
+      c_p[:birthday] = Date.strptime(c_p[:birthday], "%m/%d/%Y") if c_p[:birthday].present? && c_p[:birthday].match?(/\d{1,2}\/\d{1,2}\/\d{4}/)
     end
   end
 end

@@ -1,2 +1,5 @@
 @import "tailwindcss";
 @source "../node_modules/flowbite-datepicker";
+@import "flowbite/src/themes/default";
+@plugin "flowbite/plugin";
+@source "../../../node_modules/flowbite";

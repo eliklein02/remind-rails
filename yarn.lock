@@ -4,5 +4,5 @@
 
 awesomplete@^1.1.7:
   version "1.1.7"
-  resolved "https://registry.yarnpkg.com/awesomplete/-/awesomplete-1.1.7.tgz#480f7bb571e30c7a6d411c0139f07032943cd25a"
+  resolved "https://registry.npmjs.org/awesomplete/-/awesomplete-1.1.7.tgz"
   integrity sha512-hwClzFReIIfheoMWpoJ7juLp1o6Q7YjTtEdZIGfXvhRHA9ewKM03VS4ZoK+OEFIKM066PfQt9pzRIGV1TguRBw==
