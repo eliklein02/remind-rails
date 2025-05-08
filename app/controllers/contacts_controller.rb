@@ -13,6 +13,7 @@ class ContactsController < ApplicationController
   end
 
   def create
+    puts contact_params["year_entered"]
     @contact = Contact.new(contact_params)
     puts @contact.inspect
 

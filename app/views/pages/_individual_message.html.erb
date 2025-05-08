@@ -1,23 +1,27 @@
-<div class="w-2xl mx-auto flex flex-col gap-4">
-  <p class="text-2xl">Choose specific contacts to send a message to</p>
-  <%= form_with url: send_message_path, method: :post do |f| %>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+  <p class="text-2xl font-semibold text-gray-800 dark:text-gray-100 text-center sm:text-left">
+    Choose specific contacts to send a message to
+  </p>
+  <%= form_with url: send_message_path, method: :post, class: "space-y-4" do |f| %>
     <%= f.hidden_field :receipients, value: :individual %>
-    <div class="h-[20rem] overflow-scroll">
+    <div class="h-80 overflow-y-auto bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700 p-4">
       <% @contacts.each do |c| %>
         <% next if !c.name || !c.id %>
-        <div class="input-div flex flex-row items-center gap-2 my-2">
-          <%= checkbox_tag "contact_ids[]", c.id, class: "rounded", style: "color: black;" %>
-          <%= label_tag c.name %>
+        <div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-700">
+          <%= checkbox_tag "contact_ids[]", c.id, class: "rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600" %>
+          <%= label_tag "contact_ids_#{c.id}", c.name, class: "text-gray-700 dark:text-gray-300" %>
         </div>
       <% end %>
     </div>
-    <div class="mt-4 flex flex-row items-center">
-      <%= f.text_field :message, class: "block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: "Message..." %>
-      <div class="hover:bg-gray-200 h-full p-2 flex items-center justify-center">
-        <button type="submit" class="cursor-pointer">
-          <svg  xmlns="http://www.w3.org/2000/svg"  width="35"  height="35"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-send-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4.698 4.034l16.302 7.966l-16.302 7.966a.503 .503 0 0 1 -.546 -.124a.555 .555 0 0 1 -.12 -.568l2.468 -7.274l-2.468 -7.274a.555 .555 0 0 1 .12 -.568a.503 .503 0 0 1 .546 -.124z" /><path d="M6.5 12h14.5" /></svg>
-        </button>
-      </div>
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-4">
+      <%= f.text_field :message, class: "flex-1 block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: "Message...", required: true %>
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-3 flex items-center justify-center transition">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-send-2">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+          <path d="M4.698 4.034l16.302 7.966l-16.302 7.966a.503 .503 0 0 1 -.546 -.124a.555 .555 0 0 1 -.12 -.568l2.468 -7.274l-2.468 -7.274a.555 .555 0 0 1 .12 -.568a.503 .503 0 0 1 .546 -.124z" />
+          <path d="M6.5 12h14.5" />
+        </svg>
+      </button>
     </div>
   <% end %>
 </div>

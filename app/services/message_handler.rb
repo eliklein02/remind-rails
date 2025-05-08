@@ -26,13 +26,12 @@ class MessageHandler
   end
 
   def self.send_message_all(message)
-    Contact.all.each do |c|
+    statuses = Contact.all.map do |c|
       if send_sms(c, message) == :sent
-        return :sent
-      else
-        return :was_opted_out
+        :sent
       end
     end
+    statuses.include?(:sent) ? :sent : :was_opted_out
   end
 
   def self.send_message_specific(to, message)
