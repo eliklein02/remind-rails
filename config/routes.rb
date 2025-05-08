@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get "new_message" => "pages#new_message"
   get "privacy_policy" => "pages#privacy_policy"
   get "terms_of_service" => "pages#terms_of_service"
+  get "contact" => "pages#contact"
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
