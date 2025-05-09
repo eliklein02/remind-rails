@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <%# <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script> %>
     <title><%= content_for(:title) || "Remind Rails" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -9,15 +8,10 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= yield :head %>
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
     <link rel="icon" href="/message.svg" type="image/svg">
-    <%# <link rel="icon" href="/icon.svg" type="image/svg+xml"> %>
     <link rel="apple-touch-icon" href="/icon.png">
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
   </head>
   <body>
     <div class="min-h-screen flex flex-col justify-between">
@@ -28,6 +22,8 @@
       <main class="container mx-auto mt-28 px-5 flex flex-col">
         <%= yield %>
       </main>
-      <%= render 'layouts/footer' %>      </div>
+      <%= render 'layouts/footer' %>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js" data-turbo-track="reload"></script>
   </body>
 </html>
