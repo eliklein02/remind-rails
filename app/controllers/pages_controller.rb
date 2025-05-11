@@ -13,7 +13,7 @@ class PagesController < ApplicationController
   end
 
   def sign_up_form
-    flash[:notice] = "You have successfully opted in to recieving sms!"
+    flash[:notice] = "You have successfully been added as a contact!"
     redirect_to "/sign_up"
   end
 
