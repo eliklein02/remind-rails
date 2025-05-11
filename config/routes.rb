@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   get "/contacts/import" => "contacts#import_contacts"
   post "/contacts/import" => "contacts#import"
 
+  get "sign_up" => "pages#sign_up"
+  post "sign_up_form" => "pages#sign_up_form"
+
   resources :contacts
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
