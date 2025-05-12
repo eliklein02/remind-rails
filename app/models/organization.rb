@@ -4,5 +4,7 @@ class Organization < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  enum :organization_type, [ :school, :shul ]
+
   has_many :contacts, dependent: :destroy
 end

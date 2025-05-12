@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_12_031558) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_12_175158) do
   create_table "contacts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -31,6 +31,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_031558) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "organization_type"
     t.index ["email"], name: "index_organizations_on_email", unique: true
     t.index ["reset_password_token"], name: "index_organizations_on_reset_password_token", unique: true
   end
