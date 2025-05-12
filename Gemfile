@@ -81,3 +81,5 @@ gem "devise-tailwinded", "~> 0.1.5"
 gem "csv", "~> 3.3"
 
 gem "toastr-rails", "~> 1.0"
+
+gem "chronic", "~> 0.10.2"

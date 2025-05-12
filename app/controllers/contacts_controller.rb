@@ -14,9 +14,7 @@ class ContactsController < ApplicationController
 
   def create
     puts params
-    b_day = params["bday"]
-    @contact = Contact.new(contact_params)
-    @contact.birthday = Date.strptime(b_day, "%m/%d/%Y") if b_day.present?
+    @contact = Contact.find_or_initialize_by(name: contact_params[:name], phone: contact_params[:phone])
     if @contact.save
       flash[:notice] = "Contact was successfully created."
       redirect_to @contact
@@ -57,22 +55,41 @@ class ContactsController < ApplicationController
   def import
     require "csv"
     file = params[:file]
+    status = []
+    skipped_missing_data = []
     CSV.foreach(file, headers: true) do |row|
       h = row.to_hash
       puts h
       h = h.transform_keys { |k| k == "year_came" ? "year_entered" : k }
-      if h.key?("name") && h["name"] != nil && h["name"] != "" && h.key?("phone") && h["phone"] != nil && h["phone"] != "" && h.key?("year_entered") && h["year_entered"] != nil && h["year_entered"] != "" && h.key?("year_left") && h["year_left"] != nil && h["year_left"] != ""
-        contact = Contact.new(h)
+      h = h.transform_keys { |k| k== "Name" ? "name" : k }
+      if h.key?("name") && h["name"] != nil && h["name"] != "" && h.key?("phone") && h["phone"] != nil && h["phone"] != "" && h.key?("year_entered") && h["year_entered"] != nil && h["year_entered"] != "" || h.key?("name") && h["name"] != nil && h["name"] != "" && h.key?("phone") && h["phone"] != nil && h["phone"] != "" && h.key?("year_entered") && h["year_entered"] != nil && h["year_entered"] != "" && h.key?("year_left") && h["year_left"] != nil && h["year_left"] != ""
+        h[:year_entered] = Date.parse(Chronic.parse(h[:year_entered]).to_s) if h[:year_entered].present?
+        h[:year_left] = Date.parse(Chronic.parse(h[:year_left]).to_s) if h[:year_left].present?
+        contact = Contact.find_or_initialize_by(h)
         if contact.save
           puts "saved"
+          status << "saved"
         else
-          puts "not saved"
+          puts "not saved or something went wrong"
+          status << "not saved"
         end
       else
         puts "missing data"
+        status << "missing data"
+        skipped_missing_data << h
       end
-      flash[:notice] = "Contacts were successfully added!"
-      redirect_to contacts_path and return
+    end
+    if !status.include?("saved")
+      flash[:alert] = "Something went wrong. Please make sure the fields are all correct."
+      redirect_to "/contacts/import"
+    else
+      if status.include?("missing data")
+        flash[:warning] = "Contacts were successfully saved, but some were skipped due to incomplete data. Please review the file to confirm."
+      else
+        flash[:notice] = "Contacts were successfully saved."
+
+      end
+      redirect_to contacts_path
     end
   end
 
@@ -83,10 +100,9 @@ class ContactsController < ApplicationController
   end
 
   def contact_params
-    params.require(:contact).permit(:name, :email, :phone, :year_entered, :year_left, :birthday).tap do |c_p|
-      c_p[:year_entered] = Date.strptime(c_p[:year_entered], "%m/%d/%Y") if c_p[:year_entered].present? && c_p[:year_entered].match?(/\d{1,2}\/\d{1,2}\/\d{4}/)
-      c_p[:year_left] = Date.strptime(c_p[:year_left], "%m/%d/%Y") if c_p[:year_left].present? && c_p[:year_left].match?(/\d{1,2}\/\d{1,2}\/\d{4}/)
-      c_p[:birthday] = Date.strptime(c_p[:birthday], "%m/%d/%Y") if c_p[:birthday].present? && c_p[:birthday].match?(/\d{1,2}\/\d{1,2}\/\d{4}/)
+    params.require(:contact).permit(:name, :email, :phone, :year_entered, :year_left).tap do |c_p|
+      c_p[:year_entered] = Date.parse(Chronic.parse(c_p[:year_entered]).to_s) if c_p[:year_entered].present?
+      c_p[:year_left] =  Date.parse(Chronic.parse(c_p[:year_left]).to_s) if c_p[:year_left].present?
     end
   end
 end
