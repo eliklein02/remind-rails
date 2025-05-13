@@ -15,6 +15,9 @@ class ContactsController < ApplicationController
   def create
     puts params
     @contact = Contact.find_or_initialize_by(name: contact_params[:name], phone: contact_params[:phone])
+    @contact.email = contact_params[:email] if contact_params[:email].present?
+    @contact.year_entered = contact_params[:year_entered] if contact_params[:year_entered].present?
+    @contact.year_left = contact_params[:year_left] if contact_params[:year_left].present?
     if @contact.save
       flash[:notice] = "Contact was successfully created."
       redirect_to @contact
@@ -37,6 +40,7 @@ class ContactsController < ApplicationController
   end
 
   def destroy
+    puts params
   end
 
   def send_message

@@ -19,6 +19,7 @@ class MessageHandler
   def self.send_sms(to, what)
     if to.opted_in?
       puts "sending sms #{what} to #{to.name}"
+      MessageSent.create
       :sent
     else
       :was_opted_out

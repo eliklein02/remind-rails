@@ -1,0 +1,2 @@
+class MessageSent < ApplicationRecord
+end

@@ -17,13 +17,16 @@ class PagesController < ApplicationController
     redirect_to "/sign_up"
   end
 
-  def contact
+  def contact_us
   end
 
   def privacy_policy
   end
 
   def terms_of_service
+  end
+
+  def account
   end
 
   def new_message

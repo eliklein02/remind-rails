@@ -1,0 +1,10 @@
+<div class="container">
+  <div class="info">
+    <%= current_organization.name %>
+    <% puts current_organization.inspect%>
+    <br>
+    <%= current_organization.email %>
+    <br>
+    Since <%= current_organization.created_at.to_date %>
+  </div>
+</div>
