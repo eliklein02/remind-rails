@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  skip_before_action :authenticate_organization!, except: [ :new_message ]
+  skip_before_action :authenticate_organization!, except: [ :new_message, :account ]
   skip_before_action :verify_authenticity_token, only: [ :sign_up_form ]
 
   def home
@@ -27,6 +27,10 @@ class PagesController < ApplicationController
   end
 
   def account
+    @messages = MessageSent.all
+    @total_spent = @messages.count * 0.0035
+    @messages_this_month = MessageSent.this_month
+    @price_so_far = @messages_this_month.count * 0.0035
   end
 
   def new_message

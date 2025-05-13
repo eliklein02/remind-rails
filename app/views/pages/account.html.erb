@@ -6,5 +6,10 @@
     <%= current_organization.email %>
     <br>
     Since <%= current_organization.created_at.to_date %>
+    <br>
+    <%= @messages.count if @messages %>
+    <br>
+    <p>You have spent $<%= @price_so_far.round(2) %> this month</p>
+    <p>You have spent $<%= @total_spent.round(2) %> in total</p>
   </div>
 </div>
