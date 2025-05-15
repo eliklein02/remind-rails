@@ -3,6 +3,7 @@ class PagesController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [ :sign_up_form ]
 
   def home
+    puts request.user_agent
     @contacts = Contact.all.sort_by { |c| c.name.to_s }
   end
 
