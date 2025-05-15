@@ -4,10 +4,7 @@ class MessageHandler
     when "all"
       status = [ send_message_all(params[:message]) ]
     when "individual"
-      status = params[:contact_ids].each.map do |c|
-        contact = Contact.find(c)
-        send_message_specific(contact, params[:message])
-      end
+      status = handle_specific(params[:contact_ids], params[:message])
     when "contact_affiliation"
       status = handle_contact_affiliation(params[:contact_id], params[:message])
     when "year_enrolled"
@@ -16,9 +13,10 @@ class MessageHandler
     status
   end
 
-  def self.send_sms(to, what)
+  def self.send_sms(to, what, index)
     if to.opted_in?
       puts "sending sms #{what} to #{to.name}"
+      job = SendMessageJob.set(wait: (index + 1) * 2.seconds).perform_later(to, what)
       MessageSent.create
       :sent
     else
@@ -27,16 +25,23 @@ class MessageHandler
   end
 
   def self.send_message_all(message)
-    statuses = Contact.all.map do |c|
-      if send_sms(c, message) == :sent
+    statuses = Contact.all.each_with_index.map do |c, index|
+      puts c
+      puts index
+      return if index == 10
+      if send_sms(c, message, index) == :sent
         :sent
       end
     end
     statuses.include?(:sent) ? :sent : :was_opted_out
   end
 
-  def self.send_message_specific(to, message)
-    send_sms(to, message)
+  def self.handle_specific(contact_ids, message)
+    status = contact_ids.each_with_index.map do |c, index|
+      contact = Contact.find(c)
+      send_sms(contact, message, index)
+    end
+    status
   end
 
   def self.handle_contact_affiliation(contact_id, message)
@@ -47,8 +52,8 @@ class MessageHandler
       (c.year_entered && c.year_left) && (year_entered <= c.year_left.to_s.to_time.to_i && year_left >= c.year_entered.to_s.to_time.to_i)
     end
 
-    status = send_list.each.map do |c|
-      send_sms(c, message)
+    status = send_list.each_with_index.map do |c, index|
+      send_sms(c, message, index)
     end
     status
   end
@@ -60,8 +65,8 @@ class MessageHandler
     send_list = Contact.all.select do |c|
       (c.year_entered && c.year_left) && (start_date <= c.year_left.to_s.to_time.to_i && end_date >= c.year_entered.to_s.to_time.to_i)
     end
-    status = send_list.each.map do |c|
-      send_sms(c, params[:message])
+    status = send_list.each_with_index.map do |c, index|
+      send_sms(c, params[:message], index)
     end
     status
   end

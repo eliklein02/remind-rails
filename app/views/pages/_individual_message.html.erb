@@ -4,12 +4,15 @@
   </p>
   <%= form_with url: send_message_path, method: :post, class: "space-y-4" do |f| %>
     <%= f.hidden_field :receipients, value: :individual %>
-    <div class="h-80 overflow-y-auto bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700 p-4">
+    <div class="mb-6">
+      <input type="text" id="search_contacts" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search...">
+    </div>
+    <div class="h-80 overflow-y-auto bg-white dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700 p-4" id="contacts_container">
       <% @contacts.each do |c| %>
         <% next if !c.name || !c.id %>
-        <div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-700" id="contact_div_<%= c.id %>">
           <%= checkbox_tag "contact_ids[]", c.id, class: "rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600" %>
-          <%= label_tag "contact_ids_#{c.id}", c.name, class: "text-gray-700 dark:text-gray-300" %>
+          <%= label_tag "contact_ids_#{c.id}", "#{c.name} || #{c.phone}", class: "text-gray-700 dark:text-gray-300" %>
         </div>
       <% end %>
     </div>
@@ -25,3 +28,20 @@
     </div>
   <% end %>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("search_contacts");
+    const contactsContainer = document.getElementById("contacts_container");
+
+    searchInput.addEventListener("input", () => {
+      const searchValue = searchInput.value.toLowerCase();
+      Array.from(contactsContainer.children).forEach(e => {
+        if (e.innerText.toLowerCase().includes(searchValue)) {
+          e.style.display = ""
+        } else {
+          e.style.display = "none"
+        }
+      })
+    });
+  });
+</script>

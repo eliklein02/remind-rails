@@ -18,12 +18,16 @@ class PagesController < ApplicationController
   end
 
   def contact_us
+    @params = params
   end
 
   def privacy_policy
   end
 
   def terms_of_service
+  end
+
+  def pricing
   end
 
   def account

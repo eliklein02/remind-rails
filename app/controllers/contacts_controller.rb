@@ -40,7 +40,9 @@ class ContactsController < ApplicationController
   end
 
   def destroy
-    puts params
+    @contact.destroy
+    flash[:notice] = "Contact was successfully deleted."
+    redirect_to contacts_path
   end
 
   def send_message
