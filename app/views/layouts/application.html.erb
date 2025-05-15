@@ -16,13 +16,17 @@
   <body>
     <div class="min-h-screen flex flex-col justify-between">
       <div class="header">
-        <%= render 'layouts/navbar' %>
+        <% if !is_app? %>
+          <%= render 'layouts/navbar' %>
+        <% end %>
         <%= render 'layouts/notifications' %>
       </div>
       <main class="container mx-auto mt-28 px-5 flex flex-col">
         <%= yield %>
       </main>
-      <%= render 'layouts/footer' %>
+      <% if !is_app? %>
+        <%= render 'layouts/footer' %>
+      <% end %>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.turbo.min.js"></script>
   </body>
