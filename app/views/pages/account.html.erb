@@ -1,15 +1,63 @@
 <div class="container">
   <div class="info">
-    <%= current_organization.name %>
-    <% puts current_organization.inspect%>
-    <br>
-    <%= current_organization.email %>
-    <br>
-    Since <%= current_organization.created_at.to_date %>
-    <br>
-    <%= @messages.count if @messages %>
-    <br>
-    <p>You have spent $<%= @price_so_far.round(2) %> this month</p>
-    <p>You have spent $<%= @total_spent.round(2) %> in total</p>
+    <% if is_app? %>
+      <h1><%= current_organization.name %></h1>
+      <p>Email: <%= current_organization.email %></p>
+      <p>Member since: <%= current_organization.created_at.to_date %></p>
+      <p>Messages: <%= @messages.count if @messages %></p>
+      <p>You have spent $<%= @price_so_far.round(2) %> this month</p>
+      <p>Total spent: $<%= @total_spent.round(2) %></p>
+      <a href="/contacts" class="btn btn-primary">View Contacts</a>
+      <%= button_to 'Sign Out', destroy_organization_session_path, method: :delete, data: { turbo_method: :delete }, class: "btn btn-danger" %>
+    <% else %>
+      <h2 class="org-name"><%= current_organization.name %></h2>
+      <p><strong>Email:</strong> <%= current_organization.email %></p>
+      <p><strong>Member since:</strong> <%= current_organization.created_at.to_date %></p>
+      <p><strong>Messages:</strong> <%= @messages.count if @messages %></p>
+      <p><strong>This month:</strong> $<%= @price_so_far.round(2) %></p>
+      <p><strong>Total spent:</strong> $<%= @total_spent.round(2) %></p>
+    <% end %>
   </div>
 </div>
+<style>
+  .container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+
+  .info {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .org-name {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #007bff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+
+  .btn:hover {
+    background-color: #0056b3;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 10px;
+    }
+
+    .info {
+      font-size: 0.9em;
+    }
+  }
+</style>

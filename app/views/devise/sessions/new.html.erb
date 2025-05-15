@@ -1,22 +1,35 @@
 <div class="h-full w-full max-w-xs mx-auto align-middle my-50 md:my-0">
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'max-w-sm mx-auto'}) do |f| %>
-    <h2 class="text-center">Log in</h2>
-    <%= render "devise/shared/error_messages", resource: resource %>
-    <%# <div class="mb-4"> %>
-    <%# <%= f.label :email, "Email", class: "block text-sm font-bold mb-2 text-gray-700"  %>
-    <%# <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
-    <%# </div> %>
-    <div class="mb-5">
-      <%= f.label :email, "Email", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"  %>
-      <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-    </div>
-    <div class="mb-4">
-      <%= f.label :password, "Password", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-      <%= f.password_field :password, required: true, autocomplete: "current-password", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-    </div>
-    <div class="flex items-center justify-between content-end">
-      <%= f.submit "Log in", class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
-      <%# <%= render "devise/shared/links" %>
-    </div>
+  <% if is_app? %>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'app-form max-w-sm mx-auto p-6 bg-white rounded-lg shadow-md'}) do |f| %>
+      <h2 class="text-center text-2xl font-bold mb-6 text-gray-800">Welcome Back</h2>
+      <%= render "devise/shared/error_messages", resource: resource %>
+      <div class="mb-5">
+        <%= f.label :email, "Email", class: "block mb-2 text-sm font-medium text-gray-700"  %>
+        <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email", class: "app-input bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" %>
+      </div>
+      <div class="mb-5">
+        <%= f.label :password, "Password", class: "block mb-2 text-sm font-medium text-gray-700" %>
+        <%= f.password_field :password, required: true, autocomplete: "current-password", class: "app-input bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" %>
+      </div>
+      <div class="flex items-center justify-between">
+        <%= f.submit "Log in", class: "app-button w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none" %>
+      </div>
+    <% end %>
+  <% else %>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'max-w-sm mx-auto'}) do |f| %>
+      <h2 class="text-center">Log in</h2>
+      <%= render "devise/shared/error_messages", resource: resource %>
+      <div class="mb-5">
+        <%= f.label :email, "Email", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white"  %>
+        <%= f.email_field :email, required: true, autofocus: true, autocomplete: "email", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+      </div>
+      <div class="mb-4">
+        <%= f.label :password, "Password", class: "block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+        <%= f.password_field :password, required: true, autocomplete: "current-password", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+      </div>
+      <div class="flex items-center justify-between content-end">
+        <%= f.submit "Log in", class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" %>
+      </div>
+    <% end %>
   <% end %>
 </div>
