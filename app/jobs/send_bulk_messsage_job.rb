@@ -26,6 +26,7 @@ class SendBulkMesssageJob < ApplicationJob
         "Authorization" => "Bearer #{current_organization.encoded_textgrid_credentials}"
       },
     )
+    puts response
     response
   end
 end
