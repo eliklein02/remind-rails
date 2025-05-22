@@ -14,12 +14,12 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <div class="min-h-screen flex flex-col justify-between">
-      <div class="header">
-        <%= render 'layouts/navbar' %>
-        <%= render 'layouts/notifications' %>
-      </div>
-      <main class="container mx-auto mt-28 px-5 flex flex-col">
+    <div class="min-h-screen flex flex-col">
+      <%# <div class="header"> %>
+      <%# </div> %>
+      <%= render 'layouts/navbar' %>
+      <%= render 'layouts/notifications' %>
+      <main class="flex-grow container mx-auto mt-28 px-5 flex flex-col">
         <%= yield %>
       </main>
       <%= render 'layouts/footer' %>

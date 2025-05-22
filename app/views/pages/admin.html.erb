@@ -1,0 +1,61 @@
+<div class="container flex flex-col p-6 bg-gray-50 min-h-screen">
+  <div class="container grid grid-cols-2 grid-rows-2 gap-6 h-full">
+    <!-- Top-left: Table -->
+    <div class="square bg-white shadow-md rounded-lg p-6 flex items-center justify-center">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border-collapse">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-6 py-3 border-b">
+              Organization
+            </th>
+            <th scope="col" class="px-6 py-3 border-b">
+              Contacts Count
+            </th>
+            <th scope="col" class="px-6 py-3 border-b">
+              Messages Count
+            </th>
+            <th scope="col" class="px-6 py-3 border-b">
+              Account Created
+            </th>
+            <th scope="col" class="px-6 py-3 border-b">
+              Action
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @organizations.each do |o| %>
+            <tr class="odd:bg-white even:bg-gray-50 hover:bg-gray-100 dark:odd:bg-gray-900 dark:even:bg-gray-800 dark:hover:bg-gray-700 border-b">
+              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <%= o.name %>
+              </th>
+              <td class="px-6 py-4">
+                <%= o.contacts.count %>
+              </td>
+              <td class="px-6 py-4">
+                <%= o.message_sents.count %>
+              </td>
+              <td class="px-6 py-4">
+                <%= o.created_at.year %>
+              </td>
+              <td class="px-6 py-4">
+                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <!-- Top-right content -->
+    <div class="square bg-gradient-to-r from-blue-500 to-purple-500 shadow-md rounded-lg flex items-center justify-center text-white text-lg font-semibold">
+      <%= @total_spent.round(2) %>
+    </div>
+    <!-- Bottom-left content -->
+    <div class="square bg-gradient-to-r from-green-400 to-teal-500 shadow-md rounded-lg flex items-center justify-center text-white text-lg font-semibold">
+      <p>Bottom-left content</p>
+    </div>
+    <!-- Bottom-right content -->
+    <div class="square bg-gradient-to-r from-yellow-400 to-orange-500 shadow-md rounded-lg flex items-center justify-center text-white text-lg font-semibold">
+      <p>Bottom-right content</p>
+    </div>
+  </div>
+</div>

@@ -87,3 +87,7 @@ gem "chronic", "~> 0.10.2"
 gem "httparty", "~> 0.23.1"
 
 gem "delayed_job_active_record", "~> 4.1"
+
+gem "pay", "~> 10.1"
+
+gem "stripe", "~> 15.1"

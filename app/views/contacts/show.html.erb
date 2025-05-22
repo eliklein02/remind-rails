@@ -1,4 +1,4 @@
-<div class="container flex justify-center">
+<div class="container flex flex-col justify-center items-center gap-4">
   <div class="w-full max-w-xs p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
     <h5 class="mb-4 text-4xl font-medium text-gray-500 dark:text-gray-400"><%= @contact.name %></h5>
     <ul role="list" class="space-y-5 my-7">
@@ -14,10 +14,12 @@
           <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3"><%= @contact.email %></span>
         </li>
       <% end %>
-      <li class="flex">
-        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-stats"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" /><path d="M18 14v4h4" /><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M15 3v4" /><path d="M7 3v4" /><path d="M3 11h16" /></svg>
-        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3"><%= @contact.year_entered %> (Came)</span>
-      </li>
+      <% if @contact.year_entered %>
+        <li class="flex">
+          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-stats"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" /><path d="M18 14v4h4" /><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M15 3v4" /><path d="M7 3v4" /><path d="M3 11h16" /></svg>
+          <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3"><%= @contact.year_entered %> (Came)</span>
+        </li>
+      <% end %>
       <% if @contact.year_left %>
         <li class="flex">
           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-stats"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" /><path d="M18 14v4h4" /><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M15 3v4" /><path d="M7 3v4" /><path d="M3 11h16" /></svg>
@@ -56,3 +58,15 @@
       </div>
     </div>
   </div>
+  <div class="w-full max-w-xl h-[17rem] p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 overflow-scroll" >
+    <h5 class="mb-4 text-2xl font-medium text-gray-500 dark:text-gray-400 text-center">Recent Messages</h5>
+    <% if @contact.message_sents.any? %>
+      <% @contact.message_sents.each do |m| %>
+        <p><%= m.body || "Text content unavailable." %> - <%= m.created_at.to_date %></p>
+        <hr class="mb-2">
+      <% end %>
+    <% else %>
+      <p class="text-gray-500 dark:text-gray-400">No messages sent yet.</p>
+    <% end %>
+  </div>
+</div>

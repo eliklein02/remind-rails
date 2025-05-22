@@ -22,6 +22,15 @@ Rails.application.routes.draw do
   get "terms_of_service" => "pages#terms_of_service"
   get "contact_us" => "pages#contact_us"
   get "pricing" => "pages#pricing"
+  get "admin" => "pages#admin"
+  get "new_organization" => "pages#new_organization"
+  post "new_organization" => "pages#new_organization_accept"
+
+  # get "checkout" => "checkouts#show"
+  # get "checkout/success" => "checkouts#success"
+  # get "billing" => "billings#show"
+
+
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker

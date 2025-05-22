@@ -1,3 +1,9 @@
+<style>
+  .active-tab {
+    border-color: #4A90E2; /* Example active border color */
+    color: #4A90E2; /* Example active text color */
+  }
+</style>
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
   <p class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
     Compose a New Message
@@ -5,17 +11,17 @@
   <div class="mb-6 border-b border-gray-300 dark:border-gray-700">
     <ul class="flex flex-col sm:flex-row sm:flex-wrap text-sm font-medium text-center gap-2 sm:gap-0" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
       <li role="presentation" class="border-b sm:border-none border-gray-300 dark:border-gray-700">
-        <button class="w-full sm:w-auto px-4 py-2 text-gray-700 dark:text-gray-200 border-b-2 border-transparent rounded-lg sm:rounded-t-lg hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none" id="profile-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">
+        <button class="cursor-pointer w-full sm:w-auto px-4 py-2 text-gray-700 dark:text-gray-200 border-b-2 border-transparent rounded-lg sm:rounded-t-lg hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none" id="profile-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">
           Individual
         </button>
       </li>
       <li role="presentation" class="border-b sm:border-none border-gray-300 dark:border-gray-700">
-        <button class="w-full sm:w-auto px-4 py-2 text-gray-700 dark:text-gray-200 border-b-2 border-transparent rounded-lg sm:rounded-t-lg hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none" id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">
+        <button class="cursor-pointer w-full sm:w-auto px-4 py-2 text-gray-700 dark:text-gray-200 border-b-2 border-transparent rounded-lg sm:rounded-t-lg hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none" id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">
           Year Enrolled
         </button>
       </li>
       <li role="presentation" class="border-b sm:border-none border-gray-300 dark:border-gray-700">
-        <button class="w-full sm:w-auto px-4 py-2 text-gray-700 dark:text-gray-200 border-b-2 border-transparent rounded-lg sm:rounded-t-lg hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none" id="settings-tab" data-tabs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">
+        <button class="cursor-pointer w-full sm:w-auto px-4 py-2 text-gray-700 dark:text-gray-200 border-b-2 border-transparent rounded-lg sm:rounded-t-lg hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none" id="settings-tab" data-tabs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">
           Contact Affiliation
         </button>
       </li>
@@ -33,3 +39,26 @@
     </div>
   </div>
 </div>
+<script>
+  document.addEventListener("turbo:load", () => {
+  const tabs = document.querySelectorAll("[role='tab']");
+  const tabContents = document.querySelectorAll("[role='tabpanel']");
+  tabs[0].classList.add("active-tab")
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      // Remove "active-tab" class from all tabs
+      tabs.forEach((t) => t.classList.remove("active-tab"));
+
+      // Hide all tab contents
+      tabContents.forEach((content) => content.classList.add("hidden"));
+
+      // Add "active-tab" class to the clicked tab
+      tab.classList.add("active-tab");
+
+      // Show the corresponding tab content
+      const target = document.querySelector(tab.getAttribute("data-tabs-target"));
+      target.classList.remove("hidden");
+    });
+  });
+  });
+</script>

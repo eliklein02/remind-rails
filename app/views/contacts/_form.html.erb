@@ -28,29 +28,31 @@
       <%= f.text_field :email, id: "contact_email", class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" %>
     </div>
     <!-- Date Range -->
-    <label for="contact_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dates enrolled</label>
-    <div class="flex flex-col sm:flex-row sm:items-center sm:gap-4">
-      <!-- Year Entered -->
-      <div class="relative w-full mb-4 sm:mb-0">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-          </svg>
+    <% if current_organization.school? %>
+      <label for="contact_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dates enrolled</label>
+      <div class="flex flex-col sm:flex-row sm:items-center sm:gap-4">
+        <!-- Year Entered -->
+        <div class="relative w-full mb-4 sm:mb-0">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+            </svg>
+          </div>
+          <%= f.text_field :year_entered, value: (contact.new_record? ? "" : contact.year_entered.strftime("%d/%m/%Y") if contact.year_entered), id: "datepicker-autohide_entered", pattern: "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$", placeholder: "dd/mm/yyyy", required: true, class: "date-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" %>
         </div>
-        <%= f.text_field :year_entered, value: (contact.new_record? ? "" : contact.year_entered.strftime("%d/%m/%Y")), id: "datepicker-autohide_entered", pattern: "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$", placeholder: "dd/mm/yyyy", required: true, class: "date-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" %>
-      </div>
-      <!-- "to" separator -->
-      <div class="text-center text-gray-500 sm:mx-2 mb-2 sm:mb-0">to</div>
-      <!-- Year Left -->
-      <div class="relative w-full">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-          </svg>
+        <!-- "to" separator -->
+        <div class="text-center text-gray-500 sm:mx-2 mb-2 sm:mb-0">to</div>
+        <!-- Year Left -->
+        <div class="relative w-full">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+            </svg>
+          </div>
+          <%= f.text_field :year_left, id: "datepicker-autohide_left", value: (contact.new_record? ? "" : contact.year_left.strftime("%d/%m/%Y") if contact.year_left), pattern: "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$",  placeholder: "dd/mm/yyyy", class: "date-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" %>
         </div>
-        <%= f.text_field :year_left, id: "datepicker-autohide_left", value: (contact.new_record? ? "" : contact.year_left.strftime("%d/%m/%Y") if contact.year_left), pattern: "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$",  placeholder: "dd/mm/yyyy", class: "date-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" %>
       </div>
-    </div>
+    <% end %>
     <!-- Submit Button -->
     <div>
       <button type="submit"
@@ -61,7 +63,7 @@
   </div>
 <% end %>
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("turbo:load", () => {
     const inputs = document.querySelectorAll(".date-input");
     const the_form = document.getElementById("the_form");
     // console.log(inputs)

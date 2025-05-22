@@ -7,8 +7,10 @@
     <li><strong>Name</strong> - This field is required and must be filled out correctly.</li>
     <li><strong>Phone</strong> - This field is required and must be filled out correctly.</li>
     <li><strong>Email</strong> - This field is optional.</li>
-    <li><strong>Year Entered</strong> - This field is required and must be filled out correctly.</li>
-    <li><strong>Year Left</strong> - This field is not needed for contacts who are still enrolled.</li>
+    <% if current_organization.school? %>
+      <li><strong>Year Entered</strong> - This field is required and must be filled out correctly.</li>
+      <li><strong>Year Left</strong> - This field is not needed for contacts who are still enrolled.</li>
+    <% end %>
   </ul>
 </div>
 <div class="container flex flex-column justify-center">
