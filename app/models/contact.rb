@@ -2,6 +2,8 @@ class Contact < ApplicationRecord
   acts_as_tenant :organization
   has_many :message_sents, dependent: :destroy
 
+  validates :number, uniqueness: true, presence: true
+
   after_create_commit :to_e164
 
   enum :opted_in_status, [ :was_not_asked, :opted_in, :opted_out ]
