@@ -60,7 +60,15 @@ class ContactsController < ApplicationController
   end
 
   def import
-    puts hi
+    file = params[:file]
+    table = CSV.read(file, headers: false)
+    season_name = table[0][0].split(" ")[-2..-1].join(" ")
+    puts season_name
+    table = table.drop(1)
+    csv_string = table.map(&:to_csv).join
+    # CSV.parse(csv_string, headers: true) do |r|
+    #   puts r.to_hash
+    # end
   end
 
   private
