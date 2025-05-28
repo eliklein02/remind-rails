@@ -61,61 +61,114 @@ class ContactsController < ApplicationController
 
   def import
     begin
+      require "csv"
       file = params[:file]
-      table = CSV.read(file, headers: false)
-      season_name = table[0][0].split(" ")[-2..-1].join(" ")
-      s = Season.find_or_create_by(name: season_name)
-      table = table.drop(1)
-      csv_string = table.map(&:to_csv).join
-      CSV.parse(csv_string, headers: true) do |r|
-        h = r.to_hash
-        if h["First Name"] && h["Last Name"]
-          h["name"] = "#{h["First Name"]} #{h["Last Name"]}"
-        elsif h["first name"] && h["last name"]
-          h["name"] = "#{h["first name"]} #{h["last name"]}"
-        elsif h["first name"]
-          h["name"] = h["first name"]
-        elsif h["last name"]
-          h["name"] = h["last name"]
-        elsif h["First Name"]
-          h["name"] = h["First Name"]
-        elsif h["Last Name"]
-          h["name"] = h["Last Name"]
-        else
-          next
-        end
-        h = h.transform_keys { |k| !k.nil? && k.include?("cell") || !k.nil? && k.include?("Cell") ? "phone" : k }
-        h = h.transform_keys { |k| k == "Phone" ? "phone" : k }
-        h = h.transform_keys { |k| k == "Email" ? "email" : k }
+      status = []
+      skipped_missing_data = []
+      date_formats = {
+        "w": "11",
+        "e": "9",
+        "s": "4"
+      }
+      if current_organization.school?
+        CSV.foreach(file, headers: true) do |row|
+          h = row.to_hash
+          # puts h
+          h = h.transform_keys { |k| k == "year_came" ? "year_entered" : k }
+          h = h.transform_keys { |k| k == "Name" ? "name" : k }
+          h = h.transform_keys { |k| k == "Came" ? "year_entered" : k }
+          h = h.transform_keys { |k| k == "Left" ? "year_left" : k }
+          h = h.transform_keys { |k| k == "Email" ? "email" : k }
+          h = h.transform_keys { |k| k == "Phone" ? "phone" : k }
+          h = h.transform_keys { |k| k == "First Name" ? "first_name" : k }
+          h = h.transform_keys { |k| k == "Last Name" ? "last_name" : k }
+          h = h.transform_keys { |k| k == "Last" ? "last_name" : k }
+          h = h.transform_keys { |k| k == "First" ? "first_name" : k }
+          h = h.transform_keys { |k| k == "First name" ? "first_name" : k }
+          h = h.transform_keys { |k| k == "Last name" ? "first_name" : k }
+          h = h.transform_keys { |k| k == "Phone Number" ? "phone" : k }
 
-        if h["phone"].blank?
-          puts "Skipping row due to missing phone number: #{h}"
-          next
+          if h["first_name"]
+            h["name"] = h["first_name"]
+          end
+
+          if h["first_name"] && h["last_name"]
+            h["name"] = "#{h["first_name"]} #{h["last_name"]}"
+          end
+
+          # just making it lowercase
+          h["year_left"] = h["year_left"].downcase if h["year_left"] != "" && h["year_left"] != nil
+          h["year_entered"] = h["year_entered"].downcase if h["year_entered"] != "" && h["year_entered"] != nil
+
+          # formatting the year_left from w24 or s19 to 1/11/2024 or 1/4/2019
+          if h["year_left"] && date_formats.keys.map(&:to_s).any? { |k| h["year_left"].include?(k) }
+            given_year_left_month = h["year_left"].split("")[0]
+            given_year_left_year = h["year_left"].split("")[1..-1]
+            month = date_formats[given_year_left_month.to_sym]
+            year = "20#{given_year_left_year.join}"
+            full_date = "1/#{month}/#{year}"
+            h["year_left"] = Chronic.parse(full_date)
+          end
+
+          # formatting the year_entered from w24 or s19 to 1/11/2024 or 1/4/2019
+          if h["year_entered"] && date_formats.keys.map(&:to_s).any? { |k| h["year_entered"].include?(k) }
+            given_year_entered_month = h["year_entered"].split("")[0]
+            given_year_entered_year = h["year_entered"].split("")[1..-1]
+            month = date_formats[given_year_entered_month.to_sym]
+            year = "20#{given_year_entered_year.join}"
+            full_date = "1/#{month}/#{year}"
+            h["year_entered"] = Chronic.parse(full_date)
+          end
+
+          contact_attributes = Contact.attribute_names
+
+          if h.key?("name") && h["name"] != nil && h["name"] != "" && h.key?("phone") && h["phone"] != nil && h["phone"] != ""
+            h = h.slice(*contact_attributes)
+            contact = Contact.find_or_initialize_by(h)
+            if contact.save
+              status << "saved"
+            else
+              status << "not saved"
+            end
+          else
+            skipped_missing_data << h
+          end
         end
-        phone = to_e164(h["phone"])
-        contact = current_organization.contacts.find_or_initialize_by(name: h["name"])
-        contact.phone = phone
-        contact.email = h["email"] if h["email"].present? && h["email"] != ""
-        if contact.save
-          contact.seasons << s unless contact.seasons.include?(s)
-        else
-          puts "failed: #{contact.errors.full_messages}"
-          puts h
+
+      elsif current_organization.shul?
+        CSV.foreach(file, headers: true) do |row|
+          h = row.to_hash.transform_keys { |k| k == "Name" ? "name" : k }
+          h = row.to_hash.transform_keys { |k| k == "Phone" ? "phone" : k }
+          h = row.to_hash.transform_keys { |k| k == "Email" ? "email" : k }
+          if h.key?("name") && h["name"] != nil && h["name"] != "" && h.key?("phone") && h["phone"] != nil && h["phone"] != ""
+            c = Contact.find_or_initialize_by(h)
+            if c.save
+              status << "saved"
+            else
+              status << "not saved"
+            end
+          else
+            status << "missing data"
+            skipped_missing_data << h
+          end
         end
       end
+      if !status.include?("saved")
+        flash[:alert] = "Something went wrong. Please make sure the fields are all correct."
+        redirect_to "/contacts/import"
+      else
+        if status.include?("missing data")
+          flash[:warning] = "Contacts were successfully saved, but some were skipped due to incomplete data. Please review the file to confirm."
+        else
+          flash[:notice] = "Contacts were successfully saved."
+        end
+        redirect_to contacts_path
+      end
     rescue => e
-      flash[:alert] = "There was an error importing the file. Please check the file format and try again."
-      puts "Error parsing CSV: #{e.inspect}"
+      puts "error reading file: #{e}"
+      flash[:alert] = "Something went wrong. Please make sure the file is in the correct format."
       redirect_to "/contacts/import"
     end
-  end
-
-  def to_e164(p)
-    phone = p
-    phone.gsub!(/[^0-9]/, "")
-    phone = "+1#{phone[0..2]}#{phone[3..5]}#{phone[6..9]}" if phone.length === 10
-    phone = "+1#{phone[1..3]}#{phone[4..6]}#{phone[7..10]}" if phone.length === 11
-    phone
   end
 
   private
