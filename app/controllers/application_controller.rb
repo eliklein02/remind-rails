@@ -3,7 +3,9 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_organization!
   before_action :set_organization_as_current_tenant
   helper_method :is_app?
+  helper_method :is_mobile?
   # allow_browser versions: :modern
+  before_action :is_mobile?
 
 
   def set_organization_as_current_tenant
@@ -12,5 +14,10 @@ class ApplicationController < ActionController::Base
 
   def is_app?
     request.user_agent == "react-native"
+  end
+
+  def is_mobile?
+    browser = Browser.new(request.user_agent)
+    browser.device.mobile?
   end
 end

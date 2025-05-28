@@ -32,21 +32,27 @@ class MessageHandler
 
   def self.handle_contact_affiliation(contact_id, message, current_organization, contact_ids_array = [])
     contact = Contact.find(contact_id)
-    send_list = Contact.all.select do |c|
-      if current_organization.name == "Torah Vodaas"
-        year_left = contact.year_left || Date.today
-        (c.year_left) && (c.year_left < year_left + 2.years && c.year_left > year_left - 2.years)
-      else
-        year_entered = contact.year_entered.to_s.to_time.to_i
-        year_left = contact.year_left.to_s.to_time.to_i
-        (c.year_entered && c.year_left) && (year_entered <= c.year_left.to_s.to_time.to_i && year_left >= c.year_entered.to_s.to_time.to_i)
+    contact_seasons = contact.seasons
+    puts contact_seasons
+    send_list = Set.new
+    if current_organization.name == "Torah Vodaas"
+      contact_seasons.each do |c|
+        c.contacts.each do |co|
+          send_list << co.phone
+        end
       end
+    else
+      send_list.merge(
+        Contact.where.not(year_entered: nil, year_left: nil)
+                .where("year_entered <= ? AND year_left >= ?", contact.year_left, contact.year_entered)
+                .pluck(:phone)
+      )
     end
-    contact_ids_array.each do |c|
-      contact = Contact.find(c)
-      send_list << contact
-    end
-    send_list = send_list.map(&:phone)
+    send_list.merge(
+      Contact.where(id: contact_ids_array)
+             .pluck(:phone)
+    )
+    send_list = send_list.to_a
     send_bulk_sms(send_list, message, current_organization)
   end
 

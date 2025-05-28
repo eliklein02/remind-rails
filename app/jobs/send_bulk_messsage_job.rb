@@ -2,6 +2,7 @@ class SendBulkMesssageJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
+    return if current_organization.messages_blocked
     pn_array, message, current_organization = args
     send_bulk_sms(pn_array, message, current_organization)
   end

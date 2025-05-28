@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_19_190544) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_28_155634) do
+  create_table "contact_seasons", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "contact_id", null: false
+    t.integer "season_id", null: false
+    t.index ["contact_id"], name: "index_contact_seasons_on_contact_id"
+    t.index ["season_id"], name: "index_contact_seasons_on_season_id"
+  end
+
   create_table "contacts", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -48,6 +57,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_19_190544) do
     t.string "admin_phone_number"
     t.string "textgrid_account_sid"
     t.string "textgrid_phone_number"
+    t.boolean "messages_blocked", default: false
     t.index ["email"], name: "index_organizations_on_email", unique: true
     t.index ["reset_password_token"], name: "index_organizations_on_reset_password_token", unique: true
   end
@@ -151,6 +161,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_19_190544) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "seasons", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "organization_id"
+  end
+
+  add_foreign_key "contact_seasons", "contacts"
+  add_foreign_key "contact_seasons", "seasons"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_charges", "pay_subscriptions", column: "subscription_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"

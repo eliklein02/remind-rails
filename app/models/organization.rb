@@ -12,6 +12,7 @@ class Organization < ApplicationRecord
 
   has_many :contacts, dependent: :destroy
   has_many :message_sents, dependent: :destroy
+  has_many :seasons, dependent: :destroy
 
   def stripe_attributes(pay_customer)
     {

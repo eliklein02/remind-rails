@@ -89,6 +89,7 @@ GEM
       msgpack (~> 1.2)
     brakeman (7.0.2)
       racc
+    browser (6.2.0)
     builder (3.3.0)
     capybara (3.40.0)
       addressable
@@ -422,6 +423,7 @@ DEPENDENCIES
   acts_as_tenant (~> 1.0)
   bootsnap
   brakeman
+  browser (~> 6.2)
   capybara
   chronic (~> 0.10.2)
   csv (~> 3.3)

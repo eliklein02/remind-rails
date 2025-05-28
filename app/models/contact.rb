@@ -1,6 +1,8 @@
 class Contact < ApplicationRecord
   acts_as_tenant :organization
   has_many :message_sents, dependent: :destroy
+  has_many :contact_seasons, dependent: :destroy
+  has_many :seasons, through: :contact_seasons
 
   after_create_commit :to_e164
 

@@ -93,3 +93,5 @@ gem "pay", "~> 10.1"
 gem "stripe", "~> 15.1"
 
 gem "dotenv-rails", "~> 3.1"
+
+gem "browser", "~> 6.2"

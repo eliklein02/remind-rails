@@ -1,5 +1,6 @@
 <h1 class="text-4xl font-bold text-center mb-2">Import Contacts</h1>
 <p class="text-center mb-4">Upload a CSV file to import your contacts.</p>
+<%= image_tag '/upscaled-csv-photo.png', width: "450px", class: "mb-2 mx-auto" %>
 <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded" role="alert">
   <p class="font-bold">Important Information</p>
   <p>Please ensure your CSV file includes the following fields:</p>
@@ -24,7 +25,8 @@
           <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
           <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
         </div>
-        <%= f.file_field :file, required: true, id: "dropzone-file", hidden: true %>
+        <%= f.file_field :file, required: true, id: "dropzone-file", class: "hidden", onchange: "document.getElementById('file-name').textContent = this.files[0]?.name || 'No file chosen'" %>
+        <span id="file-name" class="mt-2 text-sm text-gray-500 dark:text-gray-400">No file chosen</span>
       </label>
     </div>
     <button type="submit" class="w-[15rem] text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Upload</button>
