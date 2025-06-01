@@ -53,7 +53,8 @@ class MessageHandler
              .pluck(:phone)
     )
     send_list = send_list.to_a
-    send_bulk_sms(send_list, message, current_organization)
+    puts send_list
+    # send_bulk_sms(send_list, message, current_organization)
   end
 
   def self.handle_year_enrolled(params, current_organization)
