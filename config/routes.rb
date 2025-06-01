@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get "admin" => "pages#admin"
   get "new_organization" => "pages#new_organization"
   post "new_organization" => "pages#new_organization_accept"
+  post "textgrid_webhook" => "api#textgrid_webhook"
 
   # get "checkout" => "checkouts#show"
   # get "checkout/success" => "checkouts#success"
