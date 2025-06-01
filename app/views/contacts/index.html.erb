@@ -36,8 +36,6 @@
           <th scope="col" class="px-6 py-3">Phone</th>
           <% if !is_mobile? %>
             <th scope="col" class="px-6 py-3">Email</th>
-            <th scope="col" class="px-6 py-3">Year Entered</th>
-            <th scope="col" class="px-6 py-3">Year Left</th>
             <th scope="col" class="px-6 py-3">Actions</th>
           <% end %>
         </tr>
@@ -51,8 +49,6 @@
             <td class="px-6 py-4"><%= c.phone %></td>
             <% if !is_mobile? %>
               <td class="px-6 py-4"><%= c.email %></td>
-              <td class="px-6 py-4"><%= c.year_entered %></td>
-              <td class="px-6 py-4"><%= c.year_left %></td>
               <td class="px-6 py-4 flex flex-row gap-2">
                 <a href="<%= contact_path c %>" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">View</a>
               </td>

@@ -17,8 +17,10 @@ class SendMessageJob < ApplicationJob
     response
   end
   def perform(*args)
+    to, what, current_organization = args
     return if current_organization.messages_blocked
-    response = send_sms(args[0], args[1], args[2])
+    return if to.opted_out?
+    response = send_sms(to, what, current_organization)
     response.code
   end
 end

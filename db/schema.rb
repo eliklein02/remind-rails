@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_28_155634) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_01_214243) do
   create_table "contact_seasons", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -24,13 +24,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_28_155634) do
     t.string "name"
     t.string "email"
     t.string "phone"
-    t.date "year_entered"
-    t.date "year_left"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "organization_id"
     t.integer "opted_in_status", default: 0
     t.string "carrier"
+  end
+
+  create_table "job_results", force: :cascade do |t|
+    t.integer "job_id"
+    t.string "status"
+    t.string "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "message_sents", force: :cascade do |t|

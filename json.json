@@ -1,0 +1,35 @@
+[
+  {
+    "body": "hi",
+    "direction": "outbound-api",
+    "from": "+15166967451",
+    "date_updated": "Sun, 01 Jun 2025 17:25:05 +0000",
+    "uri": "/2010-04-01/Accounts/gfgdWUL~j~bp~OD27AjG7Q==/Messages/SMO4YpOvGtQ3mUWxKEx1qhMbw==.json",
+    "account_sid": "gfgdWUL~j~bp~OD27AjG7Q==",
+    "num_media": "0",
+    "to": "+13474601456",
+    "date_created": "Sun, 01 Jun 2025 17:25:05 +0000",
+    "status": "queued",
+    "sid": "SMO4YpOvGtQ3mUWxKEx1qhMbw==",
+    "date_sent": "Sun, 01 Jun 2025 17:25:05 +0000",
+    "api_version": "2010-04-01",
+    "email": false
+  },
+  {
+    "body": "hi",
+    "direction": "outbound-api",
+    "from": "+15166967451",
+    "date_updated": "Sun, 01 Jun 2025 17:25:06 +0000",
+    "error_message": "'To' number invalid",
+    "uri": "/2010-04-01/Accounts/gfgdWUL~j~bp~OD27AjG7Q==/Messages/SMOcxAIKYMzzyVen8KR2YnVKw==.json",
+    "account_sid": "gfgdWUL~j~bp~OD27AjG7Q==",
+    "num_media": "0",
+    "to": "3474601",
+    "date_created": "Sun, 01 Jun 2025 17:25:06 +0000",
+    "status": "failed",
+    "sid": "SMOcxAIKYMzzyVen8KR2YnVKw==",
+    "date_sent": "Sun, 01 Jun 2025 17:25:06 +0000",
+    "api_version": "2010-04-01",
+    "email": false
+  }
+]
