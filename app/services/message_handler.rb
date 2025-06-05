@@ -2,19 +2,19 @@ class MessageHandler
   def self.init(params, current_organization)
     case params[:receipients]
     when "all"
-      status = [ send_message_all(params[:message], current_organization) ]
+      message = send_message_all(params[:message], current_organization)
     when "individual"
-      status = handle_specific(params[:contact_ids], params[:message], current_organization)
+      message = handle_specific(params[:contact_ids], params[:message], current_organization)
     when "contact_affiliation"
       if params[:contact_ids].present?
-        status = handle_contact_affiliation(params[:contact_id], params[:message], current_organization, params[:contact_ids])
+        message = handle_contact_affiliation(params[:contact_id], params[:message], current_organization, params[:contact_ids])
       else
-        status = handle_contact_affiliation(params[:contact_id], params[:message], current_organization)
+        message = handle_contact_affiliation(params[:contact_id], params[:message], current_organization)
       end
       # when "year_enrolled"
       #   status = handle_year_enrolled(params, current_organization)
     end
-    status
+    message
   end
 
   # Sends a message to all contacts in the organization
@@ -29,7 +29,16 @@ class MessageHandler
       contact = Contact.find(c)
       send_sms(contact, message, current_organization)
     end
-    status
+    if !status.include?("Message Sent Successfully")
+      message = "Message not sent: #{status[0]}"
+    else
+      succes, failed = status.partition { |s| s == "Message Sent Successfully" }
+      if failed.any?
+        message = "Message sent successfully to #{succes.count} contacts, but failed for: #{failed.count} #{failed.count == 1 ? "contact" : "contacts"}. Please check the phone numbers."
+      else
+        message = "Message sent successfully to all selected contacts."
+      end
+    end
   end
 
   # Handles sending messages to contacts affiliated with a specific contact based on their seasons
@@ -74,12 +83,46 @@ class MessageHandler
   # end
 
   # Sends an SMS to a single contact and logs the message sent
-  def self.send_sms(to, what, index, current_organization)
-    job = SendMessageJob.set.perform_later(to, what, current_organization)
+  def self.send_sms(to, what, current_organization)
+    job = SendMessageJob.perform_later(to, what, current_organization)
+
+    found = nil
+
+    tries = 0
+
+    while found.nil? && tries < 50
+      sleep 1
+      found = JobResult.find_by(job_id: job.job_id)
+      tries = tries + 1
+    end
+
+    if !found.nil?
+      tries = 0
+      found.message
+    else
+      "Something went wrong."
+    end
   end
 
   # Sends a bulk SMS to an array of phone numbers and logs the message sent
   def self.send_bulk_sms(to_array, what, current_organization)
     job = SendBulkMesssageJob.perform_later(to_array, what, current_organization)
+
+    found = nil
+
+    tries = 0
+
+    while found.nil? && tries < 25
+      sleep 1
+      found = JobResult.find_by(job_id: job.job_id)
+      tries = tries + 1
+    end
+
+    if !found.nil?
+      tries = 0
+      found.message
+    else
+      "Something went wrong."
+    end
   end
 end

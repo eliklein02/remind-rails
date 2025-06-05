@@ -49,7 +49,7 @@
   <div class="w-full max-w-xl h-[17rem] p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 overflow-scroll" >
     <h5 class="mb-4 text-2xl font-medium text-gray-500 dark:text-gray-400 text-center">Recent Messages</h5>
     <% if @contact.message_sents.any? %>
-      <% @contact.message_sents.each do |m| %>
+      <% @contact.message_sents.reverse.each do |m| %>
         <p><%= m.body || "Text content unavailable." %> - <%= m.created_at.to_date %></p>
         <hr class="mb-2">
       <% end %>

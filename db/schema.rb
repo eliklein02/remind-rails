@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_01_214243) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_04_220659) do
   create_table "contact_seasons", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -32,7 +32,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_01_214243) do
   end
 
   create_table "job_results", force: :cascade do |t|
-    t.integer "job_id"
+    t.string "job_id", default: "", null: false
     t.string "status"
     t.string "message"
     t.datetime "created_at", null: false

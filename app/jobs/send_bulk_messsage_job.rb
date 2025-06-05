@@ -5,6 +5,10 @@ class SendBulkMesssageJob < ApplicationJob
     pn_array, message, current_organization = args
     return if current_organization.messages_blocked
     message = send_bulk_sms(pn_array, message, current_organization)
+    job_id = self.job_id.to_s
+    puts "Creating JobResult with job_id: #{job_id}"
+    jr = JobResult.create(job_id: job_id, message: message)
+    puts "Saved JobResult: #{jr.inspect}"
   end
 
   def send_bulk_sms(pn_array, what, current_organization)
@@ -14,7 +18,7 @@ class SendBulkMesssageJob < ApplicationJob
     body = {
       "messages":
         pn_array.map do |pn|
-          return if Contact.find_by(phone: pn).opted_out?
+          next if Contact.find_by(phone: pn).opted_out?
           {
             "from": current_organization.textgrid_phone_number,
             "to": pn,
@@ -35,28 +39,27 @@ class SendBulkMesssageJob < ApplicationJob
     rescue StandardError => e
       puts "Error during HTTParty.post: #{e.message}"
     end
-    puts "Response code: #{response}"
     if response.code == 200
       response.each do |r|
         if r["status"] == "failed"
-          if r["error_message"] == "'To' number invalid"
-            c = Contact.find_by(phone: r["to"])
-            c.destroy
-          end
-          failed << r["to"]
+          failed << Contact.find_by(phone: r["to"]).name
         else
           successes << r["to"]
+          MessageSent.create!(
+            body: r["body"],
+            contact_id: Contact.find_by(phone: r["to"]).id
+          )
         end
       end
       message = ""
       if failed.any?
         if successes.any?
-         message =  "Sent successfully, but failed to send messages to: #{failed.join(', ')}"
+         message =  "Sent successfully, but failed to send messages to:\n #{failed.join(', ')}\n please check their phone numbers."
         else
-          message = "Failed to send messages to all numbers"
+          message = "Failed to send messages to all contacts. Please try again."
         end
       else
-        message =  "All messages sent successfully"
+        message =  "Messages sent successfully"
       end
     else
       message = "Failed to send messages: #{response.code} - #{response.message}"
