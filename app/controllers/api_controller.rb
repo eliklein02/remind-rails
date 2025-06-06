@@ -1,17 +1,48 @@
 class ApiController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [ :textgrid_webhook ]
   def textgrid_webhook
-    contacts = Contact.where(phone: params["From"])
-    message = params["Body"]
-    case message
-    when "opt out", "optout", "stop", "unsubscribe", "exit", "cancel", "#exit", "#stop"
-      if contact
-        contacts.each do |c|
-          c.update(opted_in_status: 2)
+    organization = Organization.find_by(textgrid_phone_number: params["To"])
+    ActsAsTenant.with_tenant(organization) do
+      contact = Contact.find_by(phone: params["From"])
+      message = params["Body"]
+      unsubscribe_keywords = [ "opt out", "optout", "stop", "unsubscribe", "exit", "cancel", "#exit", "#stop" ]
+      # case message
+      if message.to_s.downcase.strip.in?(unsubscribe_keywords)
+        if contact
+          contact.update(opted_in_status: 2)
+          return head :ok
+        else
+          return head :ok
         end
-      else
-        nil
       end
+      send_sms(contact, message)
     end
+    head :ok
+  end
+
+  def send_sms(to, what)
+    url = URI("#{ENV.fetch("BASE_TEXTGRID_URL")}/Accounts/#{current_organization.textgrid_account_sid}/Messages.json")
+    message_body = "#{to.name} said: #{what}"
+    response = HTTParty.post(
+      url,
+      body: {
+        "to" => current_organization.admin_phone_number,
+        "from" => current_organization.textgrid_phone_number,
+        "body" => message_body
+      }.to_json,
+      headers: {
+        "Content-Type" => "application/json",
+        "Authorization" => "Bearer #{current_organization.encoded_textgrid_credentials}"
+      },
+    )
+    if response.code != 200
+      Rails.logger.error("Failed to send SMS: #{response.code} - #{response.message}")
+    else
+      Rails.logger.info("SMS sent successfully to #{to.name}: #{what}")
+    end
+    MessageSent.create!(
+      body: message_body,
+      contact_id: Contact.find_by(phone: current_organization.admin_phone_number) || nil
+    )
   end
 end
