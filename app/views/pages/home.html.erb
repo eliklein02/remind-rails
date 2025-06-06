@@ -9,6 +9,12 @@
           This message will go to all of your contacts.
         </p>
         <%= form_with url: send_message_path, method: :post do |f| %>
+          <% if current_organization.school? %>
+            <div class="flex items-center gap-2 mb-2">
+              <%= check_box_tag :send_to_staff, class: "rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600" %>
+              <%= label_tag :send_to_rebbeim, "Send to Rebbeim", class: "text-gray-700 dark:text-gray-300 text-sm" %>
+            </div>
+          <% end %>
           <div class="flex flex-col md:flex-row items-stretch gap-3">
             <%= f.hidden_field :receipients, value: :all %>
             <%= f.text_area :message, class: "flex-grow p-3 h-64 md:h-auto text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: "Message...", id: "message-input" %>

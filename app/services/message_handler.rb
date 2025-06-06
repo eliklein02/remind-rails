@@ -2,7 +2,7 @@ class MessageHandler
   def self.init(params, current_organization)
     case params[:receipients]
     when "all"
-      message = send_message_all(params[:message], current_organization)
+      message = send_message_all(params[:message], current_organization, params[:send_to_staff])
     when "individual"
       message = handle_specific(params[:contact_ids], params[:message], current_organization)
     when "contact_affiliation"
@@ -18,8 +18,12 @@ class MessageHandler
   end
 
   # Sends a message to all contacts in the organization
-  def self.send_message_all(message, current_organization)
-    send_list = Contact.all.map(&:phone)
+  def self.send_message_all(message, current_organization, send_to_staff)
+    if send_to_staff == "1"
+      send_list = Contact.all.pluck(:phone)
+    else
+      send_list = Contact.where.not(is_staff: true).pluck(:phone)
+    end
     send_bulk_sms(send_list, message, current_organization)
   end
 
