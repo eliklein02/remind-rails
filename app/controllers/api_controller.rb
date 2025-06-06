@@ -1,12 +1,14 @@
 class ApiController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [ :textgrid_webhook ]
+  skip_before_action :verify_authenticity_token
+  skip_before_action :authenticate_organization!
   def textgrid_webhook
+    puts "Ho ho ho"
     organization = Organization.find_by(textgrid_phone_number: params["To"])
+    puts organization.inspect
     ActsAsTenant.with_tenant(organization) do
       contact = Contact.find_by(phone: params["From"])
       message = params["Body"]
       unsubscribe_keywords = [ "opt out", "optout", "stop", "unsubscribe", "exit", "cancel", "#exit", "#stop" ]
-      # case message
       if message.to_s.downcase.strip.in?(unsubscribe_keywords)
         if contact
           contact.update(opted_in_status: 2)
@@ -15,6 +17,7 @@ class ApiController < ApplicationController
           return head :ok
         end
       end
+      puts "sending sms"
       send_sms(contact, message)
     end
     head :ok
@@ -42,7 +45,7 @@ class ApiController < ApplicationController
     end
     MessageSent.create!(
       body: message_body,
-      contact_id: Contact.find_by(phone: current_organization.admin_phone_number) || nil
+      contact_id: Contact.find_by(phone: current_organization.admin_phone_number).id || nil
     )
   end
 end
