@@ -28,7 +28,7 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
-/db*
+/db/development.sqlite3
 
 /public/assets
 
