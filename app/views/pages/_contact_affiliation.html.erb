@@ -23,6 +23,10 @@
         <% end %>
       </datalist>
     </div>
+    <div class="flex items-center gap-2">
+      <%= check_box_tag :send_to_staff, class: "rounded text-blue-600 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600" %>
+      <%= label_tag :send_to_rebbeim, "Send to Rebbeim", class: "text-gray-700 dark:text-gray-300 text-sm" %>
+    </div>
     <div class="add-individual-contacts">
       <div id="accordion-color" data-accordion="collapse" data-active-classes="bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-white">
         <h2 id="accordion-color-heading-1">

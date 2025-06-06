@@ -9,7 +9,7 @@ class SendMessageJob < ApplicationJob
       body: {
         "to" => to.phone,
         "from" => current_organization.textgrid_phone_number,
-        "body" => what
+        "body" => "#{current_organization.name == "Torah Vodaas" ? "Bais Chaim Yisroel" : current_organization.name}:\n#{what}"
       }.to_json,
       headers: {
         "Content-Type" => "application/json",

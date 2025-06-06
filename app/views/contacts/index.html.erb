@@ -46,7 +46,7 @@
             <th scope="row" class="px-6 py-4 font-medium text-blue-600 underline whitespace-nowrap dark:text-white">
               <%= link_to c.name, c %>
             </th>
-            <td class="px-6 py-4"><%= c.phone %></td>
+            <td class="px-6 py-4"><%= "(#{c.phone[2..4]})-#{c.phone[5..7]}-#{c.phone[8..10]}" %></td>
             <% if !is_mobile? %>
               <td class="px-6 py-4"><%= c.email %></td>
               <td class="px-6 py-4 flex flex-row gap-2">

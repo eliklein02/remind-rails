@@ -7,9 +7,9 @@ class MessageHandler
       message = handle_specific(params[:contact_ids], params[:message], current_organization)
     when "contact_affiliation"
       if params[:contact_ids].present?
-        message = handle_contact_affiliation(params[:contact_id], params[:message], current_organization, params[:contact_ids])
+        message = handle_contact_affiliation(params[:contact_id], params[:message], current_organization, params[:contact_ids], params[:send_to_staff])
       else
-        message = handle_contact_affiliation(params[:contact_id], params[:message], current_organization)
+        message = handle_contact_affiliation(params[:contact_id], params[:message], current_organization, params[:send_to_staff])
       end
       # when "year_enrolled"
       #   status = handle_year_enrolled(params, current_organization)
@@ -42,7 +42,8 @@ class MessageHandler
   end
 
   # Handles sending messages to contacts affiliated with a specific contact based on their seasons
-  def self.handle_contact_affiliation(contact_id, message, current_organization, contact_ids_array = [])
+  def self.handle_contact_affiliation(contact_id, message, current_organization, contact_ids_array = nil, send_to_staff)
+    contact_ids_array ||= []
     contact = Contact.find(contact_id)
     contact_seasons = contact.seasons
     puts contact_seasons
@@ -65,6 +66,11 @@ class MessageHandler
              .pluck(:phone)
     )
     send_list = send_list.to_a
+    if send_to_staff == "1" || send_to_staff == 1
+      Contact.staff.each do |c|
+        send_list << c.phone
+      end
+    end
     puts send_list
     send_bulk_sms(send_list, message, current_organization)
   end

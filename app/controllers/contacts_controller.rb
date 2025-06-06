@@ -14,10 +14,14 @@ class ContactsController < ApplicationController
 
   def create
     puts params
-    @contact = Contact.find_or_initialize_by(name: contact_params[:name], phone: contact_params[:phone])
+    @contact = Contact.find_or_initialize_by(phone: to_e164(contact_params[:phone]))
+    @contact.name = contact_params[:name] if contact_params[:name].present?
     @contact.email = contact_params[:email] if contact_params[:email].present?
-    @contact.year_entered = contact_params[:year_entered] if contact_params[:year_entered].present?
-    @contact.year_left = contact_params[:year_left] if contact_params[:year_left].present?
+    @contact.is_staff = contact_params[:is_staff] if contact_params[:is_staff].present?
+    if @contact.persisted?
+      flash[:alert] = "Contact already exists with that name and phone number."
+      return redirect_to @contact
+    end
     if @contact.save
       flash[:notice] = "Contact was successfully created."
       redirect_to @contact
@@ -98,7 +102,7 @@ class ContactsController < ApplicationController
             next
           end
           phone = to_e164(h["phone"])
-          contact = current_organization.contacts.find_or_initialize_by(name: h["name"])
+          contact = Contact.find_or_initialize_by(name: h["name"])
           contact.phone = phone
           contact.email = h["email"] if h["email"].present? && h["email"] != ""
           if contact.save
@@ -172,6 +176,6 @@ class ContactsController < ApplicationController
   end
 
   def contact_params
-    params.require(:contact).permit(:name, :email, :phone)
+    params.require(:contact).permit(:name, :email, :phone, :is_staff)
   end
 end

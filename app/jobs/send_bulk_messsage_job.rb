@@ -22,7 +22,7 @@ class SendBulkMesssageJob < ApplicationJob
           {
             "from": current_organization.textgrid_phone_number,
             "to": pn,
-            "body": what
+            "body": "#{current_organization.name == "Torah Vodaas" ? "Bais Chaim Yisroel" : current_organization.name}:\n#{what}"
           }
         end
     }.to_json

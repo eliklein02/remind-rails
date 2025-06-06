@@ -4,7 +4,9 @@ class Contact < ApplicationRecord
   has_many :contact_seasons, dependent: :destroy
   has_many :seasons, through: :contact_seasons
 
-  after_create_commit :to_e164
+  scope :staff,  -> { where(is_staff: true) }
+
+  after_commit :to_e164
 
   enum :opted_in_status, [ :was_not_asked, :opted_in, :opted_out ]
 
