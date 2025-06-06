@@ -2,9 +2,7 @@ class ApiController < ApplicationController
   skip_before_action :verify_authenticity_token
   skip_before_action :authenticate_organization!
   def textgrid_webhook
-    puts "Ho ho ho"
     organization = Organization.find_by(textgrid_phone_number: params["To"])
-    puts organization.inspect
     ActsAsTenant.with_tenant(organization) do
       contact = Contact.find_by(phone: params["From"]) || params["From"]
       message = params["Body"]
@@ -18,7 +16,7 @@ class ApiController < ApplicationController
         end
       end
       puts "sending sms"
-      message_body = "#{contact.class == String ? contact : contact.name} said: #{what}"
+      message_body = "#{contact.class == String ? contact : contact.name} said: #{message}"
       send_sms(contact, message_body, organization)
     end
     head :ok
