@@ -18,24 +18,24 @@ class ApiController < ApplicationController
         end
       end
       puts "sending sms"
-      send_sms(contact, message)
+      send_sms(contact, message, organization)
     end
     head :ok
   end
 
-  def send_sms(to, what)
-    url = URI("#{ENV.fetch("BASE_TEXTGRID_URL")}/Accounts/#{current_organization.textgrid_account_sid}/Messages.json")
+  def send_sms(to, what, organization)
+    url = URI("#{ENV.fetch("BASE_TEXTGRID_URL")}/Accounts/#{organization.textgrid_account_sid}/Messages.json")
     message_body = "#{to.name} said: #{what}"
     response = HTTParty.post(
       url,
       body: {
-        "to" => current_organization.admin_phone_number,
-        "from" => current_organization.textgrid_phone_number,
+        "to" => organization.admin_phone_number,
+        "from" => organization.textgrid_phone_number,
         "body" => message_body
       }.to_json,
       headers: {
         "Content-Type" => "application/json",
-        "Authorization" => "Bearer #{current_organization.encoded_textgrid_credentials}"
+        "Authorization" => "Bearer #{organization.encoded_textgrid_credentials}"
       },
     )
     if response.code != 200
@@ -45,7 +45,7 @@ class ApiController < ApplicationController
     end
     MessageSent.create!(
       body: message_body,
-      contact_id: Contact.find_by(phone: current_organization.admin_phone_number).id || nil
+      contact_id: Contact.find_by(phone: organization.admin_phone_number).id || nil
     )
   end
 end
