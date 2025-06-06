@@ -6,32 +6,32 @@ class ApiController < ApplicationController
     organization = Organization.find_by(textgrid_phone_number: params["To"])
     puts organization.inspect
     ActsAsTenant.with_tenant(organization) do
-      contact = Contact.find_by(phone: params["From"])
+      contact = Contact.find_by(phone: params["From"]) || params["From"]
       message = params["Body"]
       unsubscribe_keywords = [ "opt out", "optout", "stop", "unsubscribe", "exit", "cancel", "#exit", "#stop" ]
       if message.to_s.downcase.strip.in?(unsubscribe_keywords)
         if contact
           contact.update(opted_in_status: 2)
-          return head :ok
+          head :ok and return
         else
-          return head :ok
+          head :ok and return
         end
       end
       puts "sending sms"
-      send_sms(contact, message, organization)
+      message_body = "#{contact.class == String ? contact : contact.name} said: #{what}"
+      send_sms(contact, message_body, organization)
     end
     head :ok
   end
 
-  def send_sms(to, what, organization)
+  def send_sms(contact, what, organization)
     url = URI("#{ENV.fetch("BASE_TEXTGRID_URL")}/Accounts/#{organization.textgrid_account_sid}/Messages.json")
-    message_body = "#{to.name} said: #{what}"
     response = HTTParty.post(
       url,
       body: {
         "to" => organization.admin_phone_number,
         "from" => organization.textgrid_phone_number,
-        "body" => message_body
+        "body" => what
       }.to_json,
       headers: {
         "Content-Type" => "application/json",
