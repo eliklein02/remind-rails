@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_05_235717) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_06_201728) do
   create_table "contact_seasons", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -36,6 +36,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_235717) do
     t.string "job_id", default: "", null: false
     t.string "status"
     t.string "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "message_receiveds", force: :cascade do |t|
+    t.string "from"
+    t.string "body"
+    t.string "organization_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

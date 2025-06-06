@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   get "terms_of_service" => "pages#terms_of_service"
   get "contact_us" => "pages#contact_us"
   get "pricing" => "pages#pricing"
+  get "responses" => "pages#responses"
   get "admin" => "pages#admin"
   get "new_organization" => "pages#new_organization"
   post "new_organization" => "pages#new_organization_accept"

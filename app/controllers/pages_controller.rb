@@ -9,6 +9,10 @@ class PagesController < ApplicationController
   def about
   end
 
+  def responses
+    @responses = MessageReceived.all
+  end
+
   def sign_up
   end
 

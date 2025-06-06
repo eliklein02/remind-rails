@@ -4,7 +4,7 @@ class ApiController < ApplicationController
   def textgrid_webhook
     organization = Organization.find_by(textgrid_phone_number: params["To"])
     ActsAsTenant.with_tenant(organization) do
-      contact = Contact.find_by(phone: params["From"]) || params["From"]
+      contact = Contact.find_by(phone: params["From"])
       message = params["Body"]
       unsubscribe_keywords = [ "opt out", "optout", "stop", "unsubscribe", "exit", "cancel", "#exit", "#stop" ]
       if message.to_s.downcase.strip.in?(unsubscribe_keywords)
@@ -15,9 +15,13 @@ class ApiController < ApplicationController
           head :ok and return
         end
       end
-      puts "sending sms"
-      message_body = "#{contact.class == String ? contact : contact.name} said: #{message}"
+      message_body = "#{contact&.name || params["From"] } said: #{message}"
       send_sms(contact, message_body, organization)
+      MessageReceived.create!(
+        body: message,
+        from: params["From"],
+        organization_id: organization.id
+      )
     end
     head :ok
   end
@@ -39,11 +43,12 @@ class ApiController < ApplicationController
     if response.code != 200
       Rails.logger.error("Failed to send SMS: #{response.code} - #{response.message}")
     else
-      Rails.logger.info("SMS sent successfully to #{to.name}: #{what}")
+      Rails.logger.info("SMS sent successfully to #{contact.name}: #{what}")
     end
+    admin = Contact.find_by(phone: organization.admin_phone_number)
     MessageSent.create!(
-      body: message_body,
-      contact_id: Contact.find_by(phone: organization.admin_phone_number).id || nil
+      body: what,
+      contact_id: admin&.id
     )
   end
 end
