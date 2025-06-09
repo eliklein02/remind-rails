@@ -7,7 +7,8 @@ class SendBulkMesssageJob < ApplicationJob
     message = send_bulk_sms(pn_array, message, current_organization)
     job_id = self.job_id.to_s
     puts "Creating JobResult with job_id: #{job_id}"
-    jr = JobResult.create(job_id: job_id, message: message)
+    # jr = JobResult.create(job_id: job_id, message: message)
+    ActionCable.server.broadcast("notification_channel_#{current_organization.id}", { message: message })
     puts "Saved JobResult: #{jr.inspect}"
   end
 

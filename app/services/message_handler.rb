@@ -118,21 +118,26 @@ class MessageHandler
   def self.send_bulk_sms(to_array, what, current_organization)
     job = SendBulkMesssageJob.perform_later(to_array, what, current_organization)
 
-    found = nil
+    # found = nil
 
-    tries = 0
+    # tries = 0
 
-    while found.nil? && tries < 25
-      sleep 1
-      found = JobResult.find_by(job_id: job.job_id)
-      tries = tries + 1
-    end
+    # while found.nil? && tries < 25
+    #   sleep 1
+    #   found = JobResult.find_by(job_id: job.job_id)
+    #   tries = tries + 1
+    # end
 
-    if !found.nil?
-      tries = 0
-      found.message
+    # if !found.nil?
+    #   tries = 0
+    #   found.message
+    # else
+    #   "Something went wrong."
+    # end
+    if job
+      "Message Sent Successfully, awaiting results."
     else
-      "Something went wrong."
+      "Message not sent, please try again."
     end
   end
 end

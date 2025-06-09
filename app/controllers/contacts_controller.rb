@@ -57,7 +57,7 @@ class ContactsController < ApplicationController
       end
     end
     message = MessageHandler.init(params, current_organization)
-    flash[:notice] = message
+    flash[:spinner] = message
     redirect_back_or_to root_path
   end
 

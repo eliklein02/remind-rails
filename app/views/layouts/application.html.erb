@@ -12,12 +12,12 @@
     <link rel="apple-touch-icon" href="/inloop-logo.png">
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <%= action_cable_meta_tag %>
   </head>
   <body>
     <div class="min-h-screen flex flex-col">
-      <%# <div class="header"> %>
-      <%# </div> %>
       <%= render 'layouts/navbar' %>
+      <% console %>
       <%= render 'layouts/notifications' %>
       <main class="flex-grow container mx-auto mt-28 px-5 flex flex-col">
         <%= yield %>

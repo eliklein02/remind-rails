@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   post "new_organization" => "pages#new_organization_accept"
   post "textgrid_webhook" => "api#textgrid_webhook"
 
+  # mount ActionCable.server => "/cable"
+
   # get "checkout" => "checkouts#show"
   # get "checkout/success" => "checkouts#success"
   # get "billing" => "billings#show"
