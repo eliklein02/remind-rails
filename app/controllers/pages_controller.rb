@@ -54,8 +54,7 @@ class PagesController < ApplicationController
 
   def new_organization_accept
     password = SecureRandom.hex(4)
-    auth_token = ENV.fetch("TEXTGRID_AUTH_TOKEN")
-    creds = convert_to_base_64(params[:organization][:textgrid_account_sid], auth_token)
+    creds = convert_to_base_64(params[:organization][:textgrid_account_sid], params[:organization][:textgrid_auth_token])
     @organization = Organization.new(organization_params)
     @organization.country = "USA"
     @organization.encoded_textgrid_credentials = creds
@@ -112,7 +111,9 @@ class PagesController < ApplicationController
       :email,
       :admin_phone_number,
       :textgrid_account_sid,
+      :textgrid_auth_token,
       :textgrid_phone_number,
+      :organization_type,
       :city
     )
   end

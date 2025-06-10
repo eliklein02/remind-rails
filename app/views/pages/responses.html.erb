@@ -5,7 +5,9 @@
       <div class="bg-white shadow rounded-lg overflow-hidden flex flex-col h-full">
         <div class="bg-gray-100 px-4 py-2 border-b">
           <h2 class="text-base font-semibold text-gray-900 truncate">
-            <%= Contact.find_by(phone: r.from)&.name || r.from %>
+            <% contact = Contact.find_by(phone: r.from)%>
+            <% next if contact.nil? %>
+            <%= contact.name || r.from %>
           </h2>
         </div>
         <div class="px-4 py-3 flex-1 flex flex-col justify-between">

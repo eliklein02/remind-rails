@@ -4,28 +4,31 @@ class SendBulkMesssageJob < ApplicationJob
   def perform(*args)
     pn_array, message, current_organization = args
     return if current_organization.messages_blocked
+    pn_array = Contact.where(phone: pn_array).where.not(opted_in_status: 2).pluck(:phone)
+    return "No phone numbers provided." if pn_array.empty?
     message = send_bulk_sms(pn_array, message, current_organization)
-    job_id = self.job_id.to_s
-    puts "Creating JobResult with job_id: #{job_id}"
+    # job_id = self.job_id.to_s
+    # puts "Creating JobResult with job_id: #{job_id}"
     # jr = JobResult.create(job_id: job_id, message: message)
     ActionCable.server.broadcast("notification_channel_#{current_organization.id}", { message: message })
     # puts "Saved JobResult: #{jr.inspect}"
   end
 
   def send_bulk_sms(pn_array, what, current_organization)
-    return if pn_array.empty?
+    puts pn_array
+    puts "-===========-"
     failed = []
     successes = []
+
     body = {
       "messages":
         pn_array.map do |pn|
-          next if Contact.find_by(phone: pn).opted_out?
           {
             "from": current_organization.textgrid_phone_number,
             "to": pn,
             "body": "#{current_organization.name == "Torah Vodaas" ? "Bais Chaim Yisroel" : current_organization.name}:\n#{what}"
           }
-        end
+        end.compact
     }.to_json
     headers = {
       "Content-Type" => "application/json",
@@ -40,7 +43,7 @@ class SendBulkMesssageJob < ApplicationJob
     rescue StandardError => e
       puts "Error during HTTParty.post: #{e.message}"
     end
-    if response.code == 200
+    if response.success?
       response.each do |r|
         if r["status"] == "failed"
           failed << Contact.find_by(phone: r["to"]).name
