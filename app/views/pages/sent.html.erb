@@ -10,11 +10,11 @@
                 <%= time_ago_in_words(s.created_at) %> ago
             </p>
             <span class="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded">
-                Job ID: <%= s.job_id %>
+                Job ID: <%= s.job_id if s.job_id %>
             </span>
             </div>
             <p class="mt-2 text-gray-800 dark:text-gray-100 truncate">
-            <%= truncate(s.original_message, length: 80) %>
+            <%= truncate(s.original_message, length: 80) if s.original_message %>
             </p>
         </a>
         <% end %>

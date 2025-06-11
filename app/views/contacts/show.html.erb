@@ -1,71 +1,101 @@
 <div class="container flex flex-col justify-center items-center gap-4">
-  <div class="w-full max-w-xs p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-    <h5 class="mb-4 text-4xl font-medium text-gray-500 dark:text-gray-400"><%= @contact.name %></h5>
-    <ul role="list" class="space-y-5 my-7">
-      <li class="flex items-center">
-        <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-phone"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" /></svg>
+  <div class="w-full max-w-xs p-6 sm:p-8 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+    <h5 class="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-100 break-words text-center">
+      <%= @contact.name %>
+    </h5>
+
+    <ul role="list" class="space-y-4 mb-6">
+      <li class="flex items-center text-gray-600 dark:text-gray-300 text-sm">
+        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5-2.5l5 2v4a2 2 0 0 1-2 2a16 16 0 0 1-15-15a2 2 0 0 1 2-2" />
+        </svg>
         <% phone = @contact.phone.gsub(/[^0-9]/, "").last(10) %>
         <% phone = "(#{phone[0..2]}) #{phone[3..5]}-#{phone[6..9]}" %>
-        <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3"><%= phone %></span>
+        <span class="ml-3 break-words"><%= phone %></span>
       </li>
+
       <% if @contact.email %>
-        <li class="flex">
-          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-mail"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" /><path d="M3 7l9 6l9 -6" /></svg>
-          <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3"><%= @contact.email %></span>
+        <li class="flex items-center text-gray-600 dark:text-gray-300 text-sm">
+          <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
+            <path d="M3 7l9 6l9-6" />
+          </svg>
+          <span class="ml-3 break-all"><%= @contact.email %></span>
         </li>
       <% end %>
+
       <% if current_organization.school? %>
-        <li class="flex items-center">
+        <li class="flex items-center text-gray-600 dark:text-gray-300 text-sm">
           <% if @contact.is_staff %>
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-buildings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 21v-15c0 -1 1 -2 2 -2h5c1 0 2 1 2 2v15" /><path d="M16 8h2c1 0 2 1 2 2v11" /><path d="M3 21h18" /><path d="M10 12v0" /><path d="M10 16v0" /><path d="M10 8v0" /><path d="M7 12v0" /><path d="M7 16v0" /><path d="M7 8v0" /><path d="M17 12v0" /><path d="M17 16v0" /></svg>
-            <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Staff</span>
+            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path d="M4 21V6a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v15M16 8h2a2 2 0 0 1 2 2v11M3 21h18" />
+            </svg>
+            <span class="ml-3">Staff</span>
           <% else %>
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-school"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 9l-10 -4l-10 4l10 4l10 -4v6" /><path d="M6 10.6v5.4a6 3 0 0 0 12 0v-5.4" /></svg>
-            <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3">Contact</span>
+            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path d="M22 9L12 5 2 9l10 4 10-4v6" />
+              <path d="M6 10.6v5.4a6 3 0 0 0 12 0v-5.4" />
+            </svg>
+            <span class="ml-3">Contact</span>
           <% end %>
         </li>
       <% end %>
     </ul>
-    <div class="contact-actions w-full max-w-md mx-auto flex flex-col space-y-2">
-      <div class="contact-actions w-full max-w-md mx-auto flex flex-col space-y-2">
-        <div class="flex space-x-2 gap-2">
-          <div class="flex-1">
-            <%= link_to edit_contact_path(@contact), class: "w-full block text-center focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm py-2.5 dark:focus:ring-yellow-900" do %>
-              <div class="flex items-center justify-center gap-2">
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
-                Edit
-              </div>
-            <% end %>
-          </div>
-          <div class="flex-1">
-            <%= form_with url: contact_path(@contact), data: {turbo_confirm: "Are you sure you want to delete this contact?"}, method: :delete do %>
-              <button type="submit" class="w-full text-center cursor-pointer focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
-                <div class="flex items-center justify-center gap-2">
-                  <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
-                  Delete
-                </div>
-              </button>
-            <% end %>
-          </div>
-        </div>
-        <%= link_to contacts_path, class: "w-full text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 font-medium rounded-lg text-sm py-2.5" do %>
-          <div class="flex items-center justify-center">
-            <svg  xmlns="http://www.w3.org/2000/svg"  width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-caret-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 6l-6 6l6 6v-12" /></svg>
-            Back to contacts
+
+    <div class="flex flex-col space-y-3">
+      <div class="flex space-x-2">
+        <%= link_to edit_contact_path(@contact), class: "flex-1 text-center text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm py-2.5 dark:focus:ring-yellow-900" do %>
+          <div class="flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+              <path d="M7 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-1" />
+              <path d="M20.4 6.6a2.1 2.1 0 0 0-2.97-2.97l-8.43 8.43v3h3l8.43-8.43z" />
+              <path d="M16 5l3 3" />
+            </svg>
+            Edit
           </div>
         <% end %>
+
+        <%= form_with url: contact_path(@contact), method: :delete, data: { turbo_confirm: "Are you sure you want to delete this contact?" }, class: "flex-1" do %>
+          <button type="submit" class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm py-2.5 dark:focus:ring-red-900">
+            <div class="flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
+              </svg>
+              Delete
+            </div>
+          </button>
+        <% end %>
       </div>
+
+      <%= link_to contacts_path, class: "w-full text-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium rounded-lg text-sm py-2.5 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-900" do %>
+        <div class="flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+            <path d="M14 6l-6 6l6 6V6z" />
+          </svg>
+          Back to Contacts
+        </div>
+      <% end %>
     </div>
   </div>
-  <div class="w-full max-w-xl h-[17rem] p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700 overflow-scroll" >
-    <h5 class="mb-4 text-2xl font-medium text-gray-500 dark:text-gray-400 text-center">Recent Messages</h5>
-    <% if @contact.message_sents.any? %>
-      <% @contact.message_sents.reverse.each do |m| %>
-        <p><%= m.body || "Text content unavailable." %> - <%= m.created_at.to_date %></p>
-        <hr class="mb-2">
-      <% end %>
-    <% else %>
-      <p class="text-gray-500 dark:text-gray-400">No messages sent yet.</p>
+ <div class="w-full max-w-xl h-[17rem] p-4 sm:p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 overflow-y-auto">
+  <h5 class="mb-4 text-xl sm:text-2xl font-semibold text-center text-gray-700 dark:text-gray-300">
+    📩 Recent Messages
+  </h5>
+
+  <% if @contact.message_sents.any? %>
+    <% @contact.message_sents.last(5).reverse.each do |m| %>
+      <div class="mb-4">
+        <p class="text-gray-800 dark:text-gray-200 text-sm sm:text-base break-words">
+          <%= m.body.presence || "Text content unavailable." %>
+        </p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 italic">
+          <%= time_ago_in_words(m.created_at) %> ago
+        </p>
+        <hr class="mt-3 border-gray-300 dark:border-gray-600">
+      </div>
     <% end %>
-  </div>
+  <% else %>
+    <p class="text-gray-500 dark:text-gray-400 text-center text-sm">No messages sent yet.</p>
+  <% end %>
+</div>
 </div>
