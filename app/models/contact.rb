@@ -6,7 +6,7 @@ class Contact < ApplicationRecord
 
   scope :staff,  -> { where(is_staff: true) }
 
-  after_commit :to_e164
+  after_create_commit :to_e164
 
   enum :opted_in_status, [ :was_not_asked, :opted_in, :opted_out ]
 

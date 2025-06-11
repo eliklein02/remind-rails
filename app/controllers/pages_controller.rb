@@ -25,6 +25,15 @@ class PagesController < ApplicationController
     @params = params
   end
 
+  def sent
+    @jobs = current_organization.job_results.sort_by { |j| j.created_at }.reverse
+  end
+
+  def job
+    @job = JobResult.find_by(job_id: params[:job_id])
+    puts @job.inspect
+  end
+
   def privacy_policy
   end
 

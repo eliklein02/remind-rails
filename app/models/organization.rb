@@ -14,7 +14,7 @@ class Organization < ApplicationRecord
   has_many :message_sents, dependent: :destroy
   has_many :message_receiveds, dependent: :destroy
   has_many :seasons, dependent: :destroy
-
+  has_many :job_results, dependent: :destroy
   def stripe_attributes(pay_customer)
     {
       address: {

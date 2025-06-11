@@ -57,7 +57,7 @@ class ContactsController < ApplicationController
       end
     end
     message = MessageHandler.init(params, current_organization)
-    flash[:spinner] = message
+    flash[:spinner] = "#{message}\nIf this takes a while, click here to see your sent messages and their statuses."
     redirect_back_or_to root_path
   end
 

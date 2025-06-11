@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_06_201728) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_11_030335) do
   create_table "contact_seasons", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -38,6 +38,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_201728) do
     t.string "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "organization_id"
+    t.text "failed_to_send_to"
+    t.text "sent_to"
+    t.text "original_message"
   end
 
   create_table "message_receiveds", force: :cascade do |t|
@@ -73,6 +77,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_201728) do
     t.string "textgrid_account_sid"
     t.string "textgrid_phone_number"
     t.boolean "messages_blocked", default: false
+    t.string "textgrid_auth_token"
     t.index ["email"], name: "index_organizations_on_email", unique: true
     t.index ["reset_password_token"], name: "index_organizations_on_reset_password_token", unique: true
   end

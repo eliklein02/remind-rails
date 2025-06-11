@@ -27,6 +27,8 @@ Rails.application.routes.draw do
   get "new_organization" => "pages#new_organization"
   post "new_organization" => "pages#new_organization_accept"
   post "textgrid_webhook" => "api#textgrid_webhook"
+  get "sent" => "pages#sent"
+  get "job" => "pages#job"
 
   # mount ActionCable.server => "/cable"
 

@@ -13,7 +13,7 @@ consumer.subscriptions.create("NotificationChannel", {
   received(data) {
     const toastSpinner = document.querySelector("#toast-spinner");
     if (toastSpinner) {
-      toastSpinner.innerText = data.message;
+      toastSpinner.innerText = `${data.message}\nClick here to view your sent messages and their statuses.`;
     }
     console.log("NotificationChannel received data:", data);
     // Called when there's incoming data on the websocket for this channel

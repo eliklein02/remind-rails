@@ -6,17 +6,12 @@ class SendBulkMesssageJob < ApplicationJob
     return if current_organization.messages_blocked
     pn_array = Contact.where(phone: pn_array).where.not(opted_in_status: 2).pluck(:phone)
     return "No phone numbers provided." if pn_array.empty?
-    message = send_bulk_sms(pn_array, message, current_organization)
-    # job_id = self.job_id.to_s
-    # puts "Creating JobResult with job_id: #{job_id}"
-    # jr = JobResult.create(job_id: job_id, message: message)
+    job_id = self.job_id.to_s
+    message = send_bulk_sms(pn_array, message, current_organization, job_id)
     ActionCable.server.broadcast("notification_channel_#{current_organization.id}", { message: message })
-    # puts "Saved JobResult: #{jr.inspect}"
   end
 
-  def send_bulk_sms(pn_array, what, current_organization)
-    puts pn_array
-    puts "-===========-"
+  def send_bulk_sms(pn_array, what, current_organization, job_id)
     failed = []
     successes = []
 
@@ -68,6 +63,7 @@ class SendBulkMesssageJob < ApplicationJob
     else
       message = "Failed to send messages: #{response.code} - #{response.message}"
     end
+    JobResult.create(job_id: job_id, message: message, organization_id: current_organization.id, failed_to_send_to: failed.join(", "), sent_to: successes.join(", "), original_message: what)
     message
   end
 end

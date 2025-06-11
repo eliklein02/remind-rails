@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="max-w-2xl mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg border border-gray-200 dark:bg-gray-900 dark:text-white dark:border-gray-800">
+
+    <!-- Original Message -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-white">📝 Original Message</h2>
+      <p class="mt-2 text-lg text-gray-700 dark:text-gray-200">
+        <%= @job.original_message %>
+      </p>
+    </div>
+
+    <!-- Status Message -->
+    <div class="mb-4">
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-300">📩 Server Response</h3>
+      <p class="mt-1 text-gray-600 dark:text-gray-400"><%= @job.message %></p>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Received <%= time_ago_in_words(@job.created_at) %> ago</p>
+    </div>
+
+
+    <!-- Successful Sends -->
+    <% if @job.sent_to.present? %>
+      <div class="mb-4">
+        <h3 class="text-lg font-semibold text-green-600 dark:text-green-400">✅ Successfully Sent</h3>
+        <ul class="mt-2 list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300">
+          <% @job.sent_to.split(", ").each do |sent_to| %>
+            <li><%= Contact.find_by(phone: sent_to).name %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+
+    <!-- Failed Sends -->
+    <% if @job.failed_to_send_to.present? %>
+      <div>
+        <h3 class="text-lg font-semibold text-red-600 dark:text-red-400">❌ Failed to Send</h3>
+        <ul class="mt-2 list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300">
+          <% @job.failed_to_send_to.split(", ").each do |failed| %>
+            <li><%= failed %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+  </div>
+</div>

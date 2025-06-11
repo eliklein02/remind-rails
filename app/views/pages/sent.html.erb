@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">📋 Messages History</h1>
+
+    <div class="space-y-4">
+        <% @jobs.each do |s| %>
+        <a href="/job?job_id=<%= s.job_id %>" class="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-all border border-gray-200 dark:bg-gray-900 dark:border-gray-800 dark:hover:border-gray-700">
+            <div class="flex justify-between items-center">
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <%= time_ago_in_words(s.created_at) %> ago
+            </p>
+            <span class="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded">
+                Job ID: <%= s.job_id %>
+            </span>
+            </div>
+            <p class="mt-2 text-gray-800 dark:text-gray-100 truncate">
+            <%= truncate(s.original_message, length: 80) %>
+            </p>
+        </a>
+        <% end %>
+    </div>
+    </div>
+</div>
