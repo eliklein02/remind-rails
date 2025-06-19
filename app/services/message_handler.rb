@@ -25,8 +25,8 @@ class MessageHandler
       send_list = Contact.where.not(is_staff: true).pluck(:phone)
     end
     send_list << current_organization.admin_phone_number if current_organization.admin_phone_number.present?
-    puts send_list.inspect
-    # send_bulk_sms(send_list, message, current_organization)
+    # puts send_list.inspect
+    send_bulk_sms(send_list, message, current_organization)
   end
 
   # Sends a message to specific contacts by their IDs which are passed in as an array

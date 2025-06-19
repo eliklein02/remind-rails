@@ -5,6 +5,7 @@ class SendBulkMesssageJob < ApplicationJob
     pn_array, message, current_organization = args
     return if current_organization.messages_blocked
     pn_array = Contact.where(phone: pn_array).where.not(opted_in_status: 2).pluck(:phone)
+    pn_array << current_organization.admin_phone_number if current_organization.admin_phone_number.present?
     return "No phone numbers provided." if pn_array.empty?
     job_id = self.job_id.to_s
     message = send_bulk_sms(pn_array, message, current_organization, job_id)
