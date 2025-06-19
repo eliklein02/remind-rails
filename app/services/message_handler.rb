@@ -75,7 +75,7 @@ class MessageHandler
         send_list << c.phone
       end
     end
-    puts send_list
+    send_list << current_organization.admin_phone_number if current_organization.admin_phone_number.present?
     send_bulk_sms(send_list, message, current_organization)
   end
 
