@@ -24,7 +24,7 @@
         <ul class="mt-2 list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300">
           <% @job.sent_to.split(", ").each do |sent_to| %>
             <% contact =  Contact.find_by(phone: sent_to) %>
-            <li><%= contact.name || "" %></li>
+            <li><%= contact&.name || "" %></li>
           <% end %>
         </ul>
       </div>
