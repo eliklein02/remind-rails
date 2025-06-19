@@ -45,10 +45,14 @@ class SendBulkMesssageJob < ApplicationJob
           failed << Contact.find_by(phone: r["to"]).name
         else
           successes << r["to"]
-          MessageSent.create!(
-            body: r["body"],
-            contact_id: Contact.find_by(phone: r["to"]).id
-          )
+          begin
+            MessageSent.create!(
+              body: r["body"],
+              contact_id: Contact.find_by(phone: r["to"]).id
+            )
+          rescue StandardError => e
+            puts "Error creating MessageSent: #{e.message}"
+          end
         end
       end
       message = ""
