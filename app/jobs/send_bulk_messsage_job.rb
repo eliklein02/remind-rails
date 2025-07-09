@@ -4,7 +4,7 @@ class SendBulkMesssageJob < ApplicationJob
   def perform(*args)
     pn_array, message, current_organization = args
     return if current_organization.messages_blocked
-    pn_array = Contact.where(phone: pn_array).where.not(opted_in_status: 2).pluck(:phone)
+    pn_array = Contact.where(phone: pn_array).where.not(opted_in_status: 2).pluck(:phone).uniq
     pn_array << current_organization.admin_phone_number if current_organization.admin_phone_number.present?
     return "No phone numbers provided." if pn_array.empty?
     job_id = self.job_id.to_s
@@ -36,7 +36,12 @@ class SendBulkMesssageJob < ApplicationJob
         body: body,
         headers: headers
       )
-    rescue StandardError => e
+    rescue => e
+      # Event.create(
+      #     is_failure: true,
+      #     message: e.message,
+      #     should_notify_admin: false
+      #   )
       puts "Error during HTTParty.post: #{e.message}"
     end
     if response.success?
@@ -45,14 +50,10 @@ class SendBulkMesssageJob < ApplicationJob
           failed << Contact.find_by(phone: r["to"]).name
         else
           successes << r["to"]
-          begin
-            MessageSent.create!(
-              body: r["body"],
-              contact_id: Contact.find_by(phone: r["to"]).id
-            )
-          rescue StandardError => e
-            puts "Error creating MessageSent: #{e.message}"
-          end
+          MessageSent.create!(
+            body: r["body"],
+            contact_id: Contact.find_by(phone: r["to"]).id
+          )
         end
       end
       message = ""

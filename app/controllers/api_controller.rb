@@ -43,7 +43,7 @@ class ApiController < ApplicationController
     if response.code != 200
       Rails.logger.error("Failed to send SMS: #{response.code} - #{response.message}")
     else
-      Rails.logger.info("SMS sent successfully to #{contact.name}: #{what}")
+      Rails.logger.info("SMS sent successfully to #{contact&.name}: #{what}")
     end
     admin = Contact.find_by(phone: organization.admin_phone_number)
     MessageSent.create!(
