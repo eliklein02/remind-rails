@@ -90,7 +90,7 @@ gem "delayed_job_active_record", "~> 4.1"
 
 gem "pay", "~> 10.1"
 
-gem "stripe", "~> 15.1"
+gem "stripe", "~> 15.4"
 
 gem "dotenv-rails", "~> 3.1"
 
